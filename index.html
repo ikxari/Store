@@ -272,6 +272,16 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .split h2{font-size:clamp(2rem,4vw,3.4rem)}
 .split .body{max-width:50ch;margin:22px 0 32px;color:var(--muted);font-size:1.05rem;white-space:pre-line}
 .split-copy{padding-block:8px}
+.hero-copy[data-align="center"]{text-align:center}
+.hero-copy[data-align="center"] .hero-sub{margin-left:auto;margin-right:auto}
+.hero-copy[data-align="center"] .hero-ctas{justify-content:center}
+.hero-copy[data-align="right"]{text-align:right}
+.hero-copy[data-align="right"] .hero-sub{margin-left:auto}
+.hero-copy[data-align="right"] .hero-ctas{justify-content:flex-end}
+.split-copy[data-align="center"]{text-align:center}
+.split-copy[data-align="center"] .body{margin-left:auto;margin-right:auto}
+.split-copy[data-align="right"]{text-align:right}
+.split-copy[data-align="right"] .body{margin-left:auto}
 @media (max-width:860px){.split{grid-template-columns:1fr}.split.reverse .split-media{order:0}.split-media{aspect-ratio:4/3.4}}
 
 /* Trust */
@@ -623,7 +633,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
           <li><a href="index.html">The Atelier</a></li>
           <li><a href="#contact">Visit Us</a></li>
           <li><a href="#crm">Contact CRM</a></li>
-          <li><a href="index.html">Admin Panel</a></li>
+          <li><a href="#admin">Admin Panel</a></li>
         </ul>
       </div>
     </div>
@@ -664,7 +674,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         titleAfter: 'Edit',
         subtext: 'Soft tailoring, hand-finished drapes and heirloom textiles in the gentlest shades of rose — designed in our atelier for the modern Indian woman.',
         image: '/images/hero-blush-edit.png',
-        fit: 'cover'
+        fit: 'cover',
+        align: 'left'
       },
       slides: [
         { eyebrow: 'Festive 2026', title: '*Ivory* Hour', subtext: 'Luminous silks and pearl-touched hand embroidery for the season of celebrations.', image: '/images/slide-ivory-hour.png', fit: 'cover' },
@@ -785,7 +796,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       }),
       categories: Array.isArray(d.categories) && d.categories.length ? d.categories.map(String) : D.categories,
       collections: D.collections.map(function (def, i) { return Object.assign({}, def, (d.collections || [])[i] || {}); }),
-      sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover' }, s); }) : [],
+      sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover', align: 'left' }, s); }) : [],
       products: Array.isArray(d.products) ? d.products.map(function (p) {
         return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, image: '', fit: 'cover' }, p, { price: Number(p.price) || 0 });
       }) : D.products
@@ -853,7 +864,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     var Tag = i === 0 ? 'h1' : 'h2';
     return '<div class="banner ' + (cls || '') + '">' +
       imgTag({ url: s.image, kw: 'fashion,model', lock: 40 + i, w: 1800, h: 1100, alt: '', eager: i === 0, fit: s.fit }) +
-      '<div class="hero-copy">' +
+      '<div class="hero-copy" data-align="' + esc(s.align || 'left') + '">' +
       (s.eyebrow ? '<span class="eyebrow">' + esc(s.eyebrow) + '</span>' : '') +
       '<' + Tag + ' class="hero-title" style="font-size:clamp(2.4rem,6vw,5.2rem);letter-spacing:-.025em">' + title + '</' + Tag + '>' +
       (s.subtext ? '<p class="hero-sub">' + esc(s.subtext) + '</p>' : '') +
@@ -887,7 +898,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       initCarousel(el.firstElementChild);
     } else {
       el.innerHTML = '<div class="hero-split">' +
-        '<div class="hero-copy">' +
+        '<div class="hero-copy" data-align="' + esc(h.align || 'left') + '">' +
         (h.eyebrow ? '<span class="eyebrow">' + esc(h.eyebrow) + '</span>' : '') +
         '<h1>' + mainTitle(h) + '</h1>' +
         (h.subtext ? '<p class="hero-sub">' + esc(h.subtext) + '</p>' : '') +
@@ -1038,7 +1049,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     $('#custom-sections').innerHTML = store.sections.map(function (s, i) {
       return '<section class="section tight" aria-label="' + esc(s.heading) + '"><div class="container"><div class="split' + (i % 2 === 0 ? ' reverse' : '') + '">' +
         '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit }) + '</div>' +
-        '<div class="split-copy">' + (s.eyebrow ? '<span class="eyebrow">' + esc(s.eyebrow) + '</span>' : '') +
+        '<div class="split-copy" data-align="' + esc(s.align || 'left') + '">' + (s.eyebrow ? '<span class="eyebrow">' + esc(s.eyebrow) + '</span>' : '') +
         '<h2>' + esc(s.heading) + '</h2>' + (s.text ? '<p class="body">' + esc(s.text) + '</p>' : '') +
         '<a class="btn btn-wa" href="' + esc(waLink(WA_MSG.general)) + '" target="_blank" rel="noopener noreferrer">' + I_WA + 'Get a Quote</a>' +
         '</div></div></div></section>';
@@ -1214,6 +1225,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function fFit(p) {
     return fSelect(p, 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]);
   }
+  function fAlign(p) {
+    return fSelect(p, 'Text alignment', [['left', 'Left'], ['center', 'Center'], ['right', 'Right']]);
+  }
 
   function catOptions() { return draft.categories.map(function (c) { return [c, c]; }); }
 
@@ -1265,7 +1279,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       radio('split', 'Split', 'Image beside the text') + radio('banner', 'Banner', 'Full-width image, text overlay') + radio('carousel', 'Carousel', 'Rotating banner slides') + '</div></div>' +
       '<div class="adm-card"><h3>Hero text & image</h3>' + fText('content.hero.eyebrow', 'Eyebrow') +
       '<div class="row">' + fText('content.hero.titleBefore', 'Title — before') + fText('content.hero.highlight', 'Highlight word (rose)') + fText('content.hero.titleAfter', 'Title — after') + '</div>' +
-      fArea('content.hero.subtext', 'Subtext', 3) + fImage('content.hero.image', 'Hero image', 'fashion,model', 40) + fFit('content.hero.fit') + '</div>' +
+      fArea('content.hero.subtext', 'Subtext', 3) + '<div class="row">' + fFit('content.hero.fit') + fAlign('content.hero.align') + '</div>' + fImage('content.hero.image', 'Hero image', 'fashion,model', 40) + '</div>' +
       '<div class="adm-card"><h3>Carousel slides</h3><p class="note">Used when the hero style is Carousel. The main hero above is slide 1. Wrap a word in *asterisks* to highlight it in rose.</p>' +
       draft.content.slides.map(function (sl, i) {
         var b = 'content.slides.' + i;
@@ -1306,7 +1320,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       draft.sections.map(function (s, i) {
         var b = 'sections.' + i;
         return '<div class="adm-card"><div class="adm-head" style="margin-bottom:12px"><h3 style="margin:0">Section ' + (i + 1) + '</h3><button class="btn btn-sm btn-danger" type="button" data-act="del-section" data-i="' + i + '">Remove</button></div>' +
-          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.heading', 'Heading') + '</div>' + fArea(b + '.text', 'Text', 4) + fImage(b + '.image', 'Image', 'fashion,editorial', 90 + i) + fFit(b + '.fit') + '</div>';
+          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.heading', 'Heading') + '</div>' + fArea(b + '.text', 'Text', 4) + '<div class="row">' + fFit(b + '.fit') + fAlign(b + '.align') + '</div>' + fImage(b + '.image', 'Image', 'fashion,editorial', 90 + i) + '</div>';
       }).join('');
   }
 
