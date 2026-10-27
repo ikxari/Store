@@ -21,7 +21,6 @@
                      images to Cloudinary's CDN (unsigned upload preset).
                      Without it, put files in /public/images and paste
                      /images/your-file.jpg — Vercel serves them via its CDN.
-                     
    ===================================================================== */
 window.IKXARI_CONFIG = {
   BACKEND_URL: "https://script.google.com/macros/s/AKfycbxDnH6czZuYoCnTN30bRuI8sMJua42MHcp-qNQS3ct24IrpG5Lf6arAAQSWHxmB5uQ5rw/exec",
@@ -159,6 +158,11 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .mmenu nav a{display:block;padding:16px 0;border-bottom:1px solid var(--line);font-size:1.5rem;font-weight:400;text-decoration:none}
 .mmenu-sub{margin-top:28px;display:grid;gap:12px}
 .mmenu-sub a.plain{display:block;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;color:var(--muted);padding:6px 0}
+.mmenu-acc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mm-link{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:12px 16px;border:1.5px solid var(--line);border-radius:var(--r-sm);background:var(--blush);color:var(--text);font-size:.82rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;transition:border-color .2s,background-color .2s,color .2s}
+.mm-link .ic{width:19px;height:19px;color:var(--rose-ink)}
+.mm-link:hover,.mm-link:active{border-color:var(--rose);background:var(--surface);color:var(--rose-ink)}
+@media (max-width:360px){.mmenu-acc{grid-template-columns:1fr}}
 
 /* Hero */
 .hero{padding-block:clamp(20px,3.5vw,48px) clamp(40px,6vw,80px)}
@@ -304,6 +308,15 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .cat-top{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(12px,env(safe-area-inset-top)) var(--pad) 12px;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .cat-body{padding-top:28px;padding-bottom:calc(60px + env(safe-area-inset-bottom))}
 .cat-body .chips{margin-bottom:18px}
+/* Admin drag & drop */
+.drag-grip{flex:none;display:inline-grid;place-items:center;width:30px;height:38px;cursor:grab;color:var(--muted);border-radius:8px;touch-action:none}
+.drag-grip:hover{background:var(--blush);color:var(--rose-ink)}
+.drag-grip:active{cursor:grabbing}
+.dnd-dragging{opacity:.4}
+.dnd-over{outline:2px dashed var(--rose);outline-offset:3px}
+.dnd-hint{font-size:.82rem;color:var(--muted);margin:-6px 0 14px;display:flex;align-items:center;gap:8px}
+.dnd-hint svg{width:15px;height:15px;color:var(--rose-ink)}
+.cat-list li .drag-grip{height:40px}
 .trust-item h3{font-size:.78rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
 .trust-item p{font-size:.9rem;color:var(--muted)}
 @media (max-width:760px){.trust{grid-template-columns:1fr}.trust-item{justify-content:flex-start}}
@@ -479,10 +492,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
       </button>
       <nav class="nav" aria-label="Primary">
-        <a href="index.html">New In</a>
-        <a href="index.html">Shop by Category</a>
-        <a href="index.html">Bestsellers</a>
-        <a href="index.html">Our Story</a>
+        <a href="#new-in">New In</a>
+        <a href="#shop-all">Products</a>
+        <a href="#bestsellers">Bestsellers</a>
+        <a href="#atelier">Our Story</a>
       </nav>
     </div>
     <a class="logo" id="brand-logo" href="index.html" aria-label="IKXARI home"></a>
@@ -513,17 +526,20 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     </button>
   </div>
   <nav aria-label="Mobile">
-    <a href="index.html">New In</a>
-    <a href="index.html">Shop by Category</a>
-    <a href="index.html">Bestsellers</a>
-    <a href="index.html">Our Story</a>
-    <a href="index.html">Collections</a>
+    <a href="#shop-all">Products</a>
+    <a href="#new-in">New In</a>
+    <a href="#shop">Shop by Category</a>
+    <a href="#bestsellers">Bestsellers</a>
+    <a href="#collections">Collections</a>
+    <a href="#atelier">Our Story</a>
     <a href="#contact">Visit Us</a>
   </nav>
   <div class="mmenu-sub">
     <a class="btn btn-wa btn-block" data-wa="general" target="_blank" rel="noopener noreferrer" href="index.html"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path><path d="M9.5 9.5c.5 2 2 3.5 4 4l1-1 2 1v1.5c-3.5.5-8-4-7.5-7.5H10.5l1 2Z"></path></svg>Get a Quote</a>
-    <a class="plain" href="index.html" data-toast="account">Account</a>
-    <a class="plain" href="index.html" data-toast="wishlist">Wishlist</a>
+    <div class="mmenu-acc">
+      <a class="mm-link" href="index.html" data-toast="account"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg>Account</a>
+      <a class="mm-link" href="index.html" data-toast="wishlist"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>Wishlist</a>
+    </div>
   </div>
 </div>
 
@@ -614,10 +630,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       <div class="footer-col">
         <h4>Shop</h4>
         <ul>
-          <li><a href="index.html">New In</a></li>
-          <li><a href="index.html">Collections</a></li>
-          <li><a href="index.html">Shop by Category</a></li>
-          <li><a href="index.html">Bestsellers</a></li>
+          <li><a href="#shop-all">All Products</a></li>
+          <li><a href="#new-in">New In</a></li>
+          <li><a href="#collections">Collections</a></li>
+          <li><a href="#bestsellers">Bestsellers</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -692,18 +708,20 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         subtext: 'Soft tailoring, hand-finished drapes and heirloom textiles in the gentlest shades of rose — designed in our atelier for the modern Indian woman.',
         image: '/images/hero-blush-edit.png',
         fit: 'cover',
+        pos: 'center',
         align: 'left'
       },
       slides: [
-        { eyebrow: 'Festive 2026', title: '*Ivory* Hour', subtext: 'Luminous silks and pearl-touched hand embroidery for the season of celebrations.', image: '/images/slide-ivory-hour.png', fit: 'cover' },
-        { eyebrow: 'Evening Atelier', title: 'After *Dusk*', subtext: 'Liquid gowns and drapes, cut to move like candlelight.', image: '/images/slide-after-dusk.png', fit: 'cover' }
+        { eyebrow: 'Festive 2026', title: '*Ivory* Hour', subtext: 'Luminous silks and pearl-touched hand embroidery for the season of celebrations.', image: '/images/slide-ivory-hour.png', fit: 'cover', pos: 'center' },
+        { eyebrow: 'Evening Atelier', title: 'After *Dusk*', subtext: 'Liquid gowns and drapes, cut to move like candlelight.', image: '/images/slide-after-dusk.png', fit: 'cover', pos: 'center' }
       ],
       atelier: {
         eyebrow: 'The Atelier',
         heading: 'Made slowly, worn for years.',
         body: 'Every IKXARI piece begins as a sketch in our studio and passes through the hands of master karigars — pattern-cutters, embroiderers and finishers who have worked with us for over a decade.\n\nWe make in small numbers, choose fabrics that soften with age, and finish each seam by hand, so what you wear today is something you will reach for long after the season ends.',
         image: '/images/atelier.png',
-        fit: 'cover'
+        fit: 'cover',
+        pos: 'center'
       },
       contact: {
         show: true,
@@ -734,9 +752,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     },
     categories: CATEGORIES.slice(),
     collections: [
-      { name: 'The Blush Edit', desc: 'Rose-washed silks and soft tailoring for the season.', image: '/images/collection-blush-edit.png', fit: 'cover' },
-      { name: 'Ivory Hour', desc: 'Pearl, chikankari and quiet luxury in shades of cream.', image: '/images/collection-ivory-hour.png', fit: 'cover' },
-      { name: 'Evening Atelier', desc: 'Gowns and drapes made for candlelit celebrations.', image: '/images/collection-evening-atelier.png', fit: 'cover' }
+      { name: 'The Blush Edit', desc: 'Rose-washed silks and soft tailoring for the season.', image: '/images/collection-blush-edit.png', fit: 'cover', pos: 'center' },
+      { name: 'Ivory Hour', desc: 'Pearl, chikankari and quiet luxury in shades of cream.', image: '/images/collection-ivory-hour.png', fit: 'cover', pos: 'center' },
+      { name: 'Evening Atelier', desc: 'Gowns and drapes made for candlelit celebrations.', image: '/images/collection-evening-atelier.png', fit: 'cover', pos: 'center' }
     ],
     sections: [],
     products: [
@@ -793,13 +811,18 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     if (useStock) return 'https://loremflickr.com/' + w + '/' + h + '/' + (kw || 'fashion,woman') + '?lock=' + lock;
     return w > h ? FALLBACK_WIDE : FALLBACK;
   }
+  var POS_MAP = { center: 'center', top: 'top center', bottom: 'bottom center', left: 'center left', right: 'center right', 'top-left': 'top left', 'top-right': 'top right', 'bottom-left': 'bottom left', 'bottom-right': 'bottom right' };
+  function posValue(p) { return POS_MAP[p] || 'center'; }
   function imgTag(opts) {
     var src = imgSrc(opts.url, opts.kw, opts.lock, opts.w || 800, opts.h || 1000);
     var wide = (opts.w || 800) > (opts.h || 1000) ? ',1' : '';
+    var style = '';
+    if (opts.fit) style += 'object-fit:' + (opts.fit === 'contain' ? 'contain' : 'cover') + ';';
+    if (opts.pos && opts.pos !== 'center') style += 'object-position:' + posValue(opts.pos) + ';';
     return '<img src="' + esc(src) + '" alt="' + esc(opts.alt || '') + '"' +
       (opts.eager ? ' fetchpriority="high"' : ' loading="lazy"') +
       ' decoding="async" width="' + (opts.w || 800) + '" height="' + (opts.h || 1000) + '"' +
-      (opts.fit ? ' style="object-fit:' + (opts.fit === 'contain' ? 'contain' : 'cover') + '"' : '') +
+      (style ? ' style="' + style + '"' : '') +
       ' onerror="ikxFallback(this' + wide + ')">';
   }
   function productKw(p) { return KW[p.category] || 'fashion,woman'; }
@@ -829,14 +852,14 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         atelier: Object.assign({}, D.content.atelier, c.atelier || {}),
         contact: Object.assign({}, D.content.contact, c.contact || {}),
         crm: Object.assign({}, D.content.crm, c.crm || {}),
-        slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover' }, s); }) : D.content.slides,
+        slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover', pos: 'center' }, s); }) : D.content.slides,
         trust: Array.isArray(c.trust) && c.trust.length ? c.trust.map(function (t) { return Object.assign({ emoji: '', title: '', text: '' }, t); }) : clone(D.content.trust)
       }),
       categories: Array.isArray(d.categories) && d.categories.length ? d.categories.map(String) : D.categories,
       collections: D.collections.map(function (def, i) { return Object.assign({}, def, (d.collections || [])[i] || {}); }),
-      sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }, s); }) : [],
+      sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover', pos: 'center', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }, s); }) : [],
       products: Array.isArray(d.products) ? d.products.map(function (p) {
-        return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, onHome: true, image: '', fit: 'cover' }, p, { price: Number(p.price) || 0 });
+        return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, onHome: true, image: '', fit: 'cover', pos: 'center' }, p, { price: Number(p.price) || 0 });
       }) : D.products
     };
     if (!['split', 'banner', 'carousel'].includes(out.content.heroStyle)) out.content.heroStyle = 'split';
@@ -903,7 +926,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     var title = isMain ? mainTitle(s) : highlight(s.title);
     var Tag = i === 0 ? 'h1' : 'h2';
     return '<div class="banner ' + (cls || '') + '">' +
-      imgTag({ url: s.image, kw: 'fashion,model', lock: 40 + i, w: 1800, h: 1100, alt: '', eager: i === 0, fit: s.fit }) +
+      imgTag({ url: s.image, kw: 'fashion,model', lock: 40 + i, w: 1800, h: 1100, alt: '', eager: i === 0, fit: s.fit, pos: s.pos }) +
       '<div class="hero-copy" data-align="' + esc(s.align || 'left') + '">' +
       (s.eyebrow ? '<span class="eyebrow">' + esc(s.eyebrow) + '</span>' : '') +
       '<' + Tag + ' class="hero-title" style="font-size:clamp(2.4rem,6vw,5.2rem);letter-spacing:-.025em">' + title + '</' + Tag + '>' +
@@ -943,7 +966,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         '<h1>' + mainTitle(h) + '</h1>' +
         (h.subtext ? '<p class="hero-sub">' + esc(h.subtext) + '</p>' : '') +
         heroCtas() + '</div>' +
-        '<div class="hero-media">' + imgTag({ url: h.image, kw: 'fashion,model', lock: 40, w: 1000, h: 1250, alt: 'IKXARI ' + (h.highlight || '') + ' collection', eager: true, fit: h.fit }) + '</div>' +
+        '<div class="hero-media">' + imgTag({ url: h.image, kw: 'fashion,model', lock: 40, w: 1000, h: 1250, alt: 'IKXARI ' + (h.highlight || '') + ' collection', eager: true, fit: h.fit, pos: h.pos }) + '</div>' +
         '</div>';
     }
   }
@@ -974,7 +997,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     var kws = ['blush,dress', 'ivory,fashion', 'evening,gown'];
     $('#collections-grid').innerHTML = store.collections.map(function (c, i) {
       return '<a class="tile" href="#shop" aria-label="Discover ' + esc(c.name) + '">' +
-        imgTag({ url: c.image, kw: kws[i], lock: 60 + i, w: 900, h: 1200, alt: '', fit: c.fit }) +
+        imgTag({ url: c.image, kw: kws[i], lock: 60 + i, w: 900, h: 1200, alt: '', fit: c.fit, pos: c.pos }) +
         '<div class="tile-copy"><h3>' + esc(c.name) + '</h3><p>' + esc(c.desc) + '</p><span class="discover">Discover</span></div></a>';
     }).join('');
   }
@@ -982,7 +1005,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function card(p) {
     var badge = p.badge ? '<span class="tag' + (p.badge === 'Bestseller' ? ' tag-best' : '') + '">' + esc(p.badge) + '</span>' : '';
     return '<article class="card">' +
-      '<div class="card-media">' + badge + imgTag({ url: p.image, kw: productKw(p), lock: lockOf(p.id), w: 600, h: 800, alt: p.name, fit: p.fit }) + '</div>' +
+      '<div class="card-media">' + badge + imgTag({ url: p.image, kw: productKw(p), lock: lockOf(p.id), w: 600, h: 800, alt: p.name, fit: p.fit, pos: p.pos }) + '</div>' +
       '<div class="card-body">' +
       '<p class="card-cat">' + esc(p.category) + '</p>' +
       '<h3 class="card-name">' + esc(p.name) + '</h3>' +
@@ -1010,7 +1033,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function renderAtelier() {
     var a = store.content.atelier;
     $('#atelier-inner').innerHTML = '<div class="split">' +
-      '<div class="split-media">' + imgTag({ url: a.image, kw: 'tailor,sewing', lock: 77, w: 900, h: 1100, alt: 'Inside the IKXARI atelier', fit: a.fit }) + '</div>' +
+      '<div class="split-media">' + imgTag({ url: a.image, kw: 'tailor,sewing', lock: 77, w: 900, h: 1100, alt: 'Inside the IKXARI atelier', fit: a.fit, pos: a.pos }) + '</div>' +
       '<div class="split-copy"><span class="eyebrow">' + esc(a.eyebrow) + '</span><h2 id="atelier-h">' + esc(a.heading) + '</h2>' +
       '<p class="body">' + esc(a.body) + '</p><a class="btn btn-outline" href="#the-house">Discover the House</a></div></div>';
   }
@@ -1089,9 +1112,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       if (s.mediaType === 'video') {
         var vh = videoHtml(s.videoUrl, s.fit);
         media = vh ? '<div class="split-media is-video">' + vh + '</div>'
-          : '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit }) + '</div>';
+          : '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit, pos: s.pos }) + '</div>';
       } else {
-        media = '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit }) + '</div>';
+        media = '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit, pos: s.pos }) + '</div>';
       }
       var btn;
       if (s.buttonLabel) {
@@ -1331,23 +1354,33 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       '</div></div></div>';
   }
 
+  function fPos(p) {
+    return fSelect(p, 'Image position / focus', [['center', 'Center'], ['top', 'Top'], ['bottom', 'Bottom'], ['left', 'Left'], ['right', 'Right'], ['top-left', 'Top-left'], ['top-right', 'Top-right'], ['bottom-left', 'Bottom-left'], ['bottom-right', 'Bottom-right']]);
+  }
   function fFit(p) {
-    return fSelect(p, 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]);
+    var pp = p.replace(/\.fit$/, '.pos');
+    return fSelect(p, 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]) + fPos(pp);
   }
   function fAlign(p) {
     return fSelect(p, 'Text alignment', [['left', 'Left'], ['center', 'Center'], ['right', 'Right']]);
   }
 
   function catOptions() { return draft.categories.map(function (c) { return [c, c]; }); }
+  function grip(g, i) {
+    return '<span class="drag-grip" draggable="true" data-dnd="' + g + '" data-i="' + i + '" role="button" aria-label="Drag to reorder" title="Drag to reorder">' +
+      '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.6"/><circle cx="15" cy="5" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/></svg></span>';
+  }
+  var DND_HINT = '<p class="dnd-hint"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="5" r="1.6"/><circle cx="15" cy="5" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="19" r="1.6"/><circle cx="15" cy="19" r="1.6"/></svg>Drag the ⠿ handle to reorder, or use ↑ ↓ on phone.</p>';
 
   function tabProducts() {
     return '<div class="adm-head"><div><h2>Products</h2><p class="muted">' + draft.products.length + ' pieces · Tap a piece to edit.</p></div>' +
       '<button class="btn btn-sm btn-rose" type="button" data-act="add-product">+ Add product</button></div>' +
+      (draft.products.length > 1 ? DND_HINT : '') +
       (draft.products.length ? '' : '<p class="empty">No products yet.</p>') +
       draft.products.map(function (p, i) {
         var b = 'products.' + i;
-        return '<details class="adm-item" data-id="' + esc(p.id) + '"' + (openIds[p.id] ? ' open' : '') + '>' +
-          '<summary><img class="thumb" src="' + esc(imgSrc(p.image, productKw(p), lockOf(p.id), 120, 150, draft.content.useStock)) + '" alt="" onerror="ikxFallback(this)">' +
+        return '<details class="adm-item" data-dnd-item data-dnd="products" data-i="' + i + '" data-id="' + esc(p.id) + '"' + (openIds[p.id] ? ' open' : '') + '>' +
+          '<summary>' + grip('products', i) + '<img class="thumb" src="' + esc(imgSrc(p.image, productKw(p), lockOf(p.id), 120, 150, draft.content.useStock)) + '" alt="" onerror="ikxFallback(this)">' +
           '<span class="sum-text"><strong>' + (esc(p.name) || 'Untitled') + '</strong><span class="muted">' + esc(p.category) + ' · ' + inr(p.price) + (p.isNew ? ' · New' : '') + (p.isBest ? ' · Best' : '') + '</span></span>' +
           '<svg class="ic chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary>' +
           '<div class="adm-item-body">' +
@@ -1357,7 +1390,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
           fSelect(b + '.badge', 'Badge', [['', 'None'], ['New', 'New'], ['Bestseller', 'Bestseller']]) + '</div>' +
           '<div class="checks">' + fCheck(b + '.onHome', 'Show on home') + fCheck(b + '.isNew', 'Show in New Arrivals') + fCheck(b + '.isBest', 'Show in Bestsellers') + '</div>' +
           fImage(b + '.image', 'Product image', productKw(p), lockOf(p.id)) +
-          fSelect(b + '.fit', 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]) +
+          '<div class="row">' + fSelect(b + '.fit', 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]) + fPos(b + '.pos') + '</div>' +
           '<div class="item-actions"><div class="grp">' +
           '<button class="sq" type="button" data-act="move-product" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
           '<button class="sq" type="button" data-act="move-product" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i === draft.products.length - 1 ? ' disabled' : '') + '>↓</button></div>' +
@@ -1369,11 +1402,13 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function tabCategories() {
     return '<div class="adm-head"><div><h2>Categories</h2><p class="muted">' + draft.categories.length + ' categories · The first 10 show as chips on the store.</p></div></div>' +
       '<div class="adm-card"><form class="inline-form" data-form="add-cat"><label for="new-cat" class="sr-only">New category name</label><input class="input" id="new-cat" name="cat" placeholder="New category name" required maxlength="40"><button class="btn btn-sm btn-rose" type="submit">Add</button></form></div>' +
+      (draft.categories.length > 1 ? DND_HINT : '') +
       '<ol class="cat-list">' + draft.categories.map(function (c, i) {
         var n = draft.products.filter(function (p) { return p.category === c; }).length;
-        return '<li><span class="num">' + (i + 1) + '</span><input class="input" value="' + esc(c) + '" data-cat-rename="' + i + '" aria-label="Rename category ' + esc(c) + '">' +
+        return '<li data-dnd-item data-dnd="categories" data-i="' + i + '">' + grip('categories', i) + '<span class="num">' + (i + 1) + '</span><input class="input" value="' + esc(c) + '" data-cat-rename="' + i + '" aria-label="Rename category ' + esc(c) + '">' +
           '<span class="cnt">' + n + (n === 1 ? ' item' : ' items') + '</span>' +
           '<button class="sq" type="button" data-act="cat-up" data-i="' + i + '" aria-label="Move ' + esc(c) + ' up"' + (i === 0 ? ' disabled' : '') + '>↑</button>' +
+          '<button class="sq" type="button" data-act="cat-down" data-i="' + i + '" aria-label="Move ' + esc(c) + ' down"' + (i === draft.categories.length - 1 ? ' disabled' : '') + '>↓</button>' +
           '<button class="sq del" type="button" data-act="del-cat" data-i="' + i + '" aria-label="Delete ' + esc(c) + '">✕</button></li>';
       }).join('') + '</ol>';
   }
@@ -1402,12 +1437,12 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       '<div class="adm-card"><h3>Carousel slides</h3><p class="note">Used when the hero style is Carousel. The main hero above is slide 1. Wrap a word in *asterisks* to highlight it in rose.</p>' +
       draft.content.slides.map(function (sl, i) {
         var b = 'content.slides.' + i;
-        return '<div class="adm-card" style="background:var(--bg)"><div class="adm-head" style="margin-bottom:10px"><strong>Slide ' + (i + 2) + '</strong><button class="btn btn-sm btn-danger" type="button" data-act="del-slide" data-i="' + i + '">Remove</button></div>' +
-          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.title', 'Title') + '</div>' + fArea(b + '.subtext', 'Subtext', 2) + fImage(b + '.image', 'Slide image', 'fashion,model', 41 + i) + fFit(b + '.fit') + '</div>';
+        return '<div class="adm-card" data-dnd-item data-dnd="slides" data-i="' + i + '" style="background:var(--bg)"><div class="adm-head" style="margin-bottom:10px"><div style="display:flex;align-items:center;gap:6px">' + grip('slides', i) + '<strong>Slide ' + (i + 2) + '</strong></div><div class="grp" style="display:flex;gap:6px"><button class="sq" type="button" data-act="move-slide" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button class="sq" type="button" data-act="move-slide" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i === draft.content.slides.length - 1 ? ' disabled' : '') + '>↓</button><button class="btn btn-sm btn-danger" type="button" data-act="del-slide" data-i="' + i + '">Remove</button></div></div>' +
+          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.title', 'Title') + '</div>' + fArea(b + '.subtext', 'Subtext', 2) + fImage(b + '.image', 'Slide image', 'fashion,model', 41 + i) + '<div class="row">' + fFit(b + '.fit') + '</div>' + '</div>';
       }).join('') +
       '<button class="btn btn-sm btn-ghost" type="button" data-act="add-slide">+ Add slide</button></div>' +
       '<div class="adm-card"><h3>The Atelier</h3>' + fText('content.atelier.eyebrow', 'Eyebrow') + fText('content.atelier.heading', 'Heading') +
-      fArea('content.atelier.body', 'Body text', 6) + fImage('content.atelier.image', 'Atelier image', 'tailor,sewing', 77) + fFit('content.atelier.fit') + '</div>' +
+      fArea('content.atelier.body', 'Body text', 6) + fImage('content.atelier.image', 'Atelier image', 'tailor,sewing', 77) + '<div class="row">' + fFit('content.atelier.fit') + '</div>' + '</div>' +
       '<div class="adm-card"><h3>Visit Us / CRM details</h3><p class="note">Shown as the “Visit Us” section, the top-bar map link, and the footer. WhatsApp number uses the field above.</p>' +
       '<div class="row">' + fText('content.contact.eyebrow', 'Eyebrow') + fText('content.contact.heading', 'Heading') + '</div>' +
       fArea('content.contact.address', 'Address', 3) +
@@ -1433,17 +1468,19 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     var kws = ['blush,dress', 'ivory,fashion', 'evening,gown'];
     return '<div class="adm-head"><h2>Collections</h2></div>' + draft.collections.map(function (c, i) {
       var b = 'collections.' + i;
-      return '<div class="adm-card"><h3>Tile ' + (i + 1) + '</h3><div class="row">' + fText(b + '.name', 'Name') + fText(b + '.desc', 'Description') + '</div>' + fImage(b + '.image', 'Image', kws[i], 60 + i) + fFit(b + '.fit') + '</div>';
+      return '<div class="adm-card"><h3>Tile ' + (i + 1) + '</h3><div class="row">' + fText(b + '.name', 'Name') + fText(b + '.desc', 'Description') + '</div>' + fImage(b + '.image', 'Image', kws[i], 60 + i) + '<div class="row">' + fFit(b + '.fit') + '</div>' + '</div>';
     }).join('');
   }
 
   function tabSections() {
     return '<div class="adm-head"><div><h2>Custom sections</h2><p class="muted">Editorial blocks shown after Bestsellers. Image and text sides alternate.</p></div>' +
       '<button class="btn btn-sm btn-rose" type="button" data-act="add-section">+ Add section</button></div>' +
+      '<p class="note">Sections appear on the home page in this order, right after Bestsellers (image/text sides alternate automatically). Reorder them to change where each one lands.</p>' +
+      (draft.sections.length > 1 ? DND_HINT : '') +
       (draft.sections.length ? '' : '<p class="empty">No custom sections yet.</p>') +
       draft.sections.map(function (s, i) {
         var b = 'sections.' + i;
-        return '<div class="adm-card"><div class="adm-head" style="margin-bottom:12px"><h3 style="margin:0">Section ' + (i + 1) + '</h3><button class="btn btn-sm btn-danger" type="button" data-act="del-section" data-i="' + i + '">Remove</button></div>' +
+        return '<div class="adm-card" data-dnd-item data-dnd="sections" data-i="' + i + '"><div class="adm-head" style="margin-bottom:12px"><div style="display:flex;align-items:center;gap:6px">' + grip('sections', i) + '<h3 style="margin:0">Section ' + (i + 1) + '</h3></div><div class="grp" style="display:flex;gap:6px"><button class="sq" type="button" data-act="move-section" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button class="sq" type="button" data-act="move-section" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i === draft.sections.length - 1 ? ' disabled' : '') + '>↓</button><button class="btn btn-sm btn-danger" type="button" data-act="del-section" data-i="' + i + '">Remove</button></div></div>' +
           '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.heading', 'Heading') + '</div>' + fArea(b + '.text', 'Text', 4) +
           '<div class="row">' + fFit(b + '.fit') + fAlign(b + '.align') + '</div>' +
           '<div class="row">' + fSelect(b + '.mediaType', 'Media type', [['image', 'Image'], ['video', 'Video (YouTube / Drive / mp4)']]) + fText(b + '.videoUrl', 'Video URL', { type: 'url', attrs: 'inputmode="url" placeholder="YouTube / Drive / .mp4 link"' }) + '</div>' +
@@ -1513,6 +1550,38 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     var d = e.target; if (d.tagName === 'DETAILS' && d.dataset.id) openIds[d.dataset.id] = d.open;
   }, true);
 
+  /* ---------- admin drag & drop reorder ---------- */
+  var dnd = { group: null, from: -1 };
+  function dndArray(g) { return g === 'products' ? draft.products : g === 'categories' ? draft.categories : g === 'slides' ? draft.content.slides : g === 'sections' ? draft.sections : null; }
+  function cleanupDnd() { dnd.group = null; dnd.from = -1; $$('.dnd-dragging', adminEl).forEach(function (x) { x.classList.remove('dnd-dragging'); }); $$('.dnd-over', adminEl).forEach(function (x) { x.classList.remove('dnd-over'); }); }
+  // Stop a click on the grip from toggling a <details>
+  adminEl.addEventListener('click', function (e) { if (e.target.closest('.drag-grip')) e.preventDefault(); }, true);
+  adminEl.addEventListener('dragstart', function (e) {
+    var g = e.target.closest('.drag-grip'); if (!g) return;
+    dnd.group = g.getAttribute('data-dnd'); dnd.from = +g.getAttribute('data-i');
+    var item = g.closest('[data-dnd-item]'); if (item) item.classList.add('dnd-dragging');
+    if (e.dataTransfer) { e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', String(dnd.from)); } catch (x) {} }
+  });
+  adminEl.addEventListener('dragover', function (e) {
+    if (dnd.group === null) return;
+    var item = e.target.closest('[data-dnd-item][data-dnd="' + dnd.group + '"]'); if (!item) return;
+    e.preventDefault(); if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+    $$('.dnd-over', adminEl).forEach(function (x) { if (x !== item) x.classList.remove('dnd-over'); });
+    item.classList.add('dnd-over');
+  });
+  adminEl.addEventListener('drop', function (e) {
+    if (dnd.group === null) return;
+    var item = e.target.closest('[data-dnd-item][data-dnd="' + dnd.group + '"]'); if (!item) { cleanupDnd(); return; }
+    e.preventDefault();
+    var to = +item.getAttribute('data-i'), from = dnd.from, arr = dndArray(dnd.group);
+    cleanupDnd();
+    if (arr && from > -1 && to > -1 && from !== to) {
+      var moved = arr.splice(from, 1)[0]; arr.splice(to, 0, moved);
+      markDirty(); renderAdmin();
+    }
+  });
+  adminEl.addEventListener('dragend', cleanupDnd);
+
   adminEl.addEventListener('submit', function (e) {
     e.preventDefault();
     var f = e.target;
@@ -1553,6 +1622,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         break;
       case 'move-product': swap(draft.products, i, i + (+b.getAttribute('data-d'))); markDirty(); renderAdmin(); break;
       case 'cat-up': swap(draft.categories, i, i - 1); markDirty(); renderAdmin(); break;
+      case 'cat-down': swap(draft.categories, i, i + 1); markDirty(); renderAdmin(); break;
+      case 'move-slide': swap(draft.content.slides, i, i + (+b.getAttribute('data-d'))); markDirty(); renderAdmin(); break;
+      case 'move-section': swap(draft.sections, i, i + (+b.getAttribute('data-d'))); markDirty(); renderAdmin(); break;
       case 'del-cat':
         var cname = draft.categories[i], used = draft.products.filter(function (p) { return p.category === cname; }).length;
         if (confirm('Delete category “' + cname + '”?' + (used ? '\n' + used + ' product(s) still use it — reassign them afterwards.' : ''))) { draft.categories.splice(i, 1); markDirty(); renderAdmin(); }
