@@ -317,6 +317,7 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .dnd-hint{font-size:.82rem;color:var(--muted);margin:-6px 0 14px;display:flex;align-items:center;gap:8px}
 .dnd-hint svg{width:15px;height:15px;color:var(--rose-ink)}
 .cat-list li .drag-grip{height:40px}
+.checks-scroll{max-height:240px;overflow-y:auto;border:1px solid var(--line);border-radius:var(--r-sm);padding:12px;background:var(--bg)}
 /* Product card dual CTA */
 .card-cta{margin-top:auto;display:flex;flex-direction:column;gap:8px}
 .card-cta .btn{margin-top:0}
@@ -525,9 +526,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
       </button>
       <nav class="nav" aria-label="Primary">
-        <a href="#new-in">New In</a>
+        <a href="#shelves">New In</a>
         <a href="#shop-all">Products</a>
-        <a href="#bestsellers">Bestsellers</a>
+        <a href="#shop">Shop</a>
         <a href="#atelier">Our Story</a>
       </nav>
     </div>
@@ -560,9 +561,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   </div>
   <nav aria-label="Mobile">
     <a href="#shop-all">Products</a>
-    <a href="#new-in">New In</a>
+    <a href="#shelves">New In</a>
     <a href="#shop">Shop by Category</a>
-    <a href="#bestsellers">Bestsellers</a>
     <a href="#collections">Collections</a>
     <a href="#atelier">Our Story</a>
     <a href="#contact">Visit Us</a>
@@ -592,15 +592,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     </div>
   </section>
 
-  <section class="section tight" id="new-in" aria-labelledby="new-h">
-    <div class="container">
-      <div class="section-head">
-        <div><span class="eyebrow">Just Arrived</span><h2 id="new-h">New Arrivals</h2></div>
-        <a class="link-arrow" href="index.html">Shop all</a>
-      </div>
-      <div class="grid" id="grid-new"></div>
-    </div>
-  </section>
+  <div id="shelves"></div>
 
   <section class="section tight" id="shop" aria-labelledby="shop-h">
     <div class="container">
@@ -616,16 +608,6 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 
   <section class="section tight" id="atelier" aria-labelledby="atelier-h">
     <div class="container"><div class="panel" id="atelier-inner"></div></div>
-  </section>
-
-  <section class="section tight" id="bestsellers" aria-labelledby="best-h">
-    <div class="container">
-      <div class="section-head">
-        <div><span class="eyebrow">Most Loved</span><h2 id="best-h">Bestsellers</h2></div>
-        <a class="link-arrow" href="index.html">Shop all</a>
-      </div>
-      <div class="grid" id="grid-best"></div>
-    </div>
   </section>
 
   <div id="custom-sections"></div>
@@ -664,9 +646,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         <h4>Shop</h4>
         <ul>
           <li><a href="#shop-all">All Products</a></li>
-          <li><a href="#new-in">New In</a></li>
+          <li><a href="#shelves">New In</a></li>
           <li><a href="#collections">Collections</a></li>
-          <li><a href="#bestsellers">Bestsellers</a></li>
+          <li><a href="#shop">Shop by Category</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -786,6 +768,13 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         { emoji: '🚚', title: 'Complimentary Shipping', text: 'On orders over ₹10,000' },
         { emoji: '↩️', title: '14-Day Returns', text: 'Easy, considered exchanges' },
         { emoji: '✂️', title: 'Atelier Crafted', text: 'Hand-finished in small numbers' }
+      ],
+      shelves: [
+        { id: 'sh_new', eyebrow: 'Just Arrived', title: 'New In', source: 'new', tag: '', categories: [], productIds: [], limit: 8, viewAll: true },
+        { id: 'sh_best', eyebrow: 'Most Loved', title: 'Bestsellers', source: 'best', tag: '', categories: [], productIds: [], limit: 8, viewAll: true },
+        { id: 'sh_women', eyebrow: 'The Edit', title: 'Ikxari Women', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true },
+        { id: 'sh_plus', eyebrow: 'Extended Sizes', title: 'Ikxari Plus', source: 'tag', tag: 'Plus', categories: [], productIds: [], limit: 8, viewAll: true },
+        { id: 'sh_special', eyebrow: 'Limited Offers', title: 'Special Prices', source: 'tag', tag: 'Special', categories: [], productIds: [], limit: 8, viewAll: true }
       ]
     },
     categories: CATEGORIES.slice(),
@@ -891,13 +880,14 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         contact: Object.assign({}, D.content.contact, c.contact || {}),
         crm: Object.assign({}, D.content.crm, c.crm || {}),
         slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover', pos: 'center' }, s); }) : D.content.slides,
-        trust: Array.isArray(c.trust) && c.trust.length ? c.trust.map(function (t) { return Object.assign({ emoji: '', title: '', text: '' }, t); }) : clone(D.content.trust)
+        trust: Array.isArray(c.trust) && c.trust.length ? c.trust.map(function (t) { return Object.assign({ emoji: '', title: '', text: '' }, t); }) : clone(D.content.trust),
+        shelves: Array.isArray(c.shelves) ? c.shelves.map(function (sh) { return Object.assign({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: '', title: 'Section', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true }, sh, { categories: Array.isArray(sh.categories) ? sh.categories : [], productIds: Array.isArray(sh.productIds) ? sh.productIds : [], limit: Math.max(1, Math.min(48, Number(sh.limit) || 8)) }); }) : clone(D.content.shelves)
       }),
       categories: Array.isArray(d.categories) && d.categories.length ? d.categories.map(String) : D.categories,
       collections: D.collections.map(function (def, i) { return Object.assign({}, def, (d.collections || [])[i] || {}); }),
       sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover', pos: 'center', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }, s); }) : [],
       products: Array.isArray(d.products) ? d.products.map(function (p) {
-        return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, onHome: true, image: '', fit: 'cover', pos: 'center' }, p, { price: Number(p.price) || 0 });
+        return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, onHome: true, tags: '', image: '', fit: 'cover', pos: 'center' }, p, { price: Number(p.price) || 0 });
       }) : D.products
     };
     if (!['split', 'banner', 'carousel'].includes(out.content.heroStyle)) out.content.heroStyle = 'split';
@@ -1059,7 +1049,33 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function emptyState(msg) {
     return '<p class="empty">' + msg + ' <a href="' + esc(waLink(WA_MSG.general)) + '" target="_blank" rel="noopener noreferrer">Ask us on WhatsApp</a>.</p>';
   }
-  function renderGrid(sel, list, msg) { $(sel).innerHTML = list.length ? list.map(card).join('') : emptyState(msg); }
+  function renderGrid(sel, list, msg) { var el = $(sel); if (!el) return; el.innerHTML = list.length ? list.map(card).join('') : emptyState(msg); }
+
+  /* ---------- product shelves (named rows) ---------- */
+  function shelfProducts(sh) {
+    var list;
+    switch (sh.source) {
+      case 'new': list = store.products.filter(function (p) { return p.isNew; }); break;
+      case 'best': list = store.products.filter(function (p) { return p.isBest; }); break;
+      case 'category': var cs = sh.categories || []; list = store.products.filter(function (p) { return cs.indexOf(p.category) > -1; }); break;
+      case 'tag': var t = String(sh.tag || '').toLowerCase().trim(); list = t ? store.products.filter(function (p) { return String(p.tags || '').toLowerCase().split(',').map(function (s) { return s.trim(); }).indexOf(t) > -1; }) : []; break;
+      case 'manual': list = (sh.productIds || []).map(prodById).filter(Boolean); break;
+      default: list = store.products.slice();
+    }
+    return list.slice(0, Math.max(1, Number(sh.limit) || 8));
+  }
+  function renderShelves() {
+    var el = $('#shelves'); if (!el) return;
+    el.innerHTML = (store.content.shelves || []).map(function (sh) {
+      var prods = shelfProducts(sh);
+      if (!prods.length) return ''; // hide empty shelves on the live site
+      return '<section class="section tight shelf" aria-label="' + esc(sh.title) + '"><div class="container">' +
+        '<div class="section-head"><div>' + (sh.eyebrow ? '<span class="eyebrow">' + esc(sh.eyebrow) + '</span>' : '') + '<h2>' + esc(sh.title) + '</h2></div>' +
+        (sh.viewAll ? '<a class="link-arrow" href="#shop-all">View all</a>' : '') + '</div>' +
+        '<div class="grid">' + prods.map(card).join('') + '</div>' +
+        '</div></section>';
+    }).join('');
+  }
 
   function renderShop() {
     // Home shows only the products flagged "Show on home", capped at homeLimit.
@@ -1271,11 +1287,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   }
 
   function renderAll() {
-    var limit = store.content.homeLimit || 6;
     renderBranding(); renderAnnouncement(); renderHero(); renderCollections();
-    renderGrid('#grid-new', store.products.filter(function (p) { return p.isNew; }).slice(0, limit), 'New arrivals are on their way.');
+    renderShelves();
     renderShop(); renderAtelier();
-    renderGrid('#grid-best', store.products.filter(function (p) { return p.isBest; }).slice(0, limit), 'Bestsellers coming soon.');
     renderSections(); renderTrust(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
     renderCartCount();
     if (!$('#catalog').hidden) renderCatalog();
@@ -1400,7 +1414,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     setTimeout(function () { var p = $('#gate-pin'); if (p) p.focus(); }, 30);
   }
 
-  var TABS = [['products', 'Products'], ['categories', 'Categories'], ['content', 'Content'], ['collections', 'Collections'], ['sections', 'Sections'], ['data', 'Data / PIN']];
+  var TABS = [['products', 'Products'], ['shelves', 'Shelves'], ['categories', 'Categories'], ['content', 'Content'], ['collections', 'Collections'], ['sections', 'Sections'], ['data', 'Data / PIN']];
 
   function renderAdmin() {
     if (!unlocked()) return renderGate();
@@ -1411,7 +1425,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       '<div class="adm-tabs" role="tablist" aria-label="Admin sections">' + TABS.map(function (t) {
         return '<button class="chip" role="tab" type="button" data-act="tab" data-tab="' + t[0] + '" aria-selected="' + (tab === t[0]) + '" aria-pressed="' + (tab === t[0]) + '">' + t[1] + '</button>';
       }).join('') + '</div>' +
-      '<div class="adm-body" role="tabpanel">' + ({ products: tabProducts, categories: tabCategories, content: tabContent, collections: tabCollections, sections: tabSections, data: tabData }[tab])() + '</div>' +
+      '<div class="adm-body" role="tabpanel">' + ({ products: tabProducts, shelves: tabShelves, categories: tabCategories, content: tabContent, collections: tabCollections, sections: tabSections, data: tabData }[tab])() + '</div>' +
       '<div class="savebar"><span class="status" id="save-status" aria-live="polite"></span><button class="btn btn-rose" type="button" data-act="save">Save</button></div>';
     setStatus(dirty ? 'Unsaved changes' : lastStatus.text, dirty ? 'dirty' : lastStatus.cls);
     adminEl.scrollTop = y;
@@ -1489,6 +1503,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
           fText(b + '.price', 'Price (₹)', { type: 'number', attrs: 'min="0" step="100" inputmode="numeric"' }) +
           fSelect(b + '.badge', 'Badge', [['', 'None'], ['New', 'New'], ['Bestseller', 'Bestseller']]) + '</div>' +
           '<div class="checks">' + fCheck(b + '.onHome', 'Show on home') + fCheck(b + '.isNew', 'Show in New Arrivals') + fCheck(b + '.isBest', 'Show in Bestsellers') + '</div>' +
+          fText(b + '.tags', 'Tags (comma — e.g. Plus, Special, Women) — used by Shelves') +
           fImage(b + '.image', 'Product image', productKw(p), lockOf(p.id)) +
           '<div class="row">' + fSelect(b + '.fit', 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]) + fPos(b + '.pos') + '</div>' +
           '<div class="item-actions"><div class="grp">' +
@@ -1589,6 +1604,52 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       }).join('');
   }
 
+  function shelfProductsDraft(sh) {
+    var ps = draft.products;
+    function byId(id) { for (var i = 0; i < ps.length; i++) if (ps[i].id === id) return ps[i]; return null; }
+    var list;
+    switch (sh.source) {
+      case 'new': list = ps.filter(function (p) { return p.isNew; }); break;
+      case 'best': list = ps.filter(function (p) { return p.isBest; }); break;
+      case 'category': var cs = sh.categories || []; list = ps.filter(function (p) { return cs.indexOf(p.category) > -1; }); break;
+      case 'tag': var t = String(sh.tag || '').toLowerCase().trim(); list = t ? ps.filter(function (p) { return String(p.tags || '').toLowerCase().split(',').map(function (s) { return s.trim(); }).indexOf(t) > -1; }) : []; break;
+      case 'manual': list = (sh.productIds || []).map(byId).filter(Boolean); break;
+      default: list = ps.slice();
+    }
+    return list.slice(0, Math.max(1, Number(sh.limit) || 8));
+  }
+  function tabShelves() {
+    var srcOpts = [['new', 'New arrivals (auto)'], ['best', 'Bestsellers (auto)'], ['all', 'All products'], ['category', 'By category'], ['tag', 'By tag'], ['manual', 'Hand-pick products']];
+    return '<div class="adm-head"><div><h2>Shelves</h2><p class="muted">Named product rows on the home page (New In, Bestsellers, Ikxari Women…). Empty shelves auto-hide.</p></div>' +
+      '<button class="btn btn-sm btn-rose" type="button" data-act="add-shelf">+ Add shelf</button></div>' +
+      (draft.content.shelves.length > 1 ? DND_HINT : '') +
+      (draft.content.shelves.length ? '' : '<p class="empty">No shelves yet.</p>') +
+      draft.content.shelves.map(function (sh, i) {
+        var b = 'content.shelves.' + i, sub = '';
+        if (sh.source === 'category') {
+          sub = '<div class="field"><label>Categories in this shelf</label><div class="checks">' + draft.categories.map(function (cat) {
+            return '<label class="check"><input type="checkbox" data-shelfcat="' + i + '" value="' + esc(cat) + '"' + ((sh.categories || []).indexOf(cat) > -1 ? ' checked' : '') + '>' + esc(cat) + '</label>';
+          }).join('') + '</div></div>';
+        } else if (sh.source === 'tag') {
+          sub = fText(b + '.tag', 'Tag to match (e.g. Plus, Special) — set it on products in the Products tab');
+        } else if (sh.source === 'manual') {
+          sub = '<div class="field"><label>Pick products for this shelf</label><div class="checks checks-scroll">' + draft.products.map(function (p) {
+            return '<label class="check"><input type="checkbox" data-shelfprod="' + i + '" value="' + esc(p.id) + '"' + ((sh.productIds || []).indexOf(p.id) > -1 ? ' checked' : '') + '>' + (esc(p.name) || 'Untitled') + '</label>';
+          }).join('') + '</div></div>';
+        }
+        var count = shelfProductsDraft(sh).length;
+        return '<div class="adm-card" data-dnd-item data-dnd="shelves" data-i="' + i + '">' +
+          '<div class="adm-head" style="margin-bottom:12px"><div style="display:flex;align-items:center;gap:6px">' + grip('shelves', i) + '<h3 style="margin:0">' + (esc(sh.title) || 'Shelf') + '</h3></div>' +
+          '<div class="grp" style="display:flex;gap:6px"><button class="sq" type="button" data-act="move-shelf" data-i="' + i + '" data-d="-1" aria-label="Move up"' + (i === 0 ? ' disabled' : '') + '>↑</button><button class="sq" type="button" data-act="move-shelf" data-i="' + i + '" data-d="1" aria-label="Move down"' + (i === draft.content.shelves.length - 1 ? ' disabled' : '') + '>↓</button><button class="btn btn-sm btn-danger" type="button" data-act="del-shelf" data-i="' + i + '">Remove</button></div></div>' +
+          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow (small label)') + fText(b + '.title', 'Title') + '</div>' +
+          '<div class="row">' + fSelect(b + '.source', 'Products from', srcOpts) + fText(b + '.limit', 'Max products', { type: 'number', attrs: 'min="1" max="48" step="1" inputmode="numeric"' }) + '</div>' +
+          sub +
+          '<p class="hint' + (count ? ' ok' : ' warn') + '">' + count + ' product(s) match now' + (count ? '.' : ' — this shelf is hidden until it has products.') + '</p>' +
+          '<div class="checks" style="margin:0">' + fCheck(b + '.viewAll', 'Show “View all” link to the full catalog') + '</div>' +
+          '</div>';
+      }).join('');
+  }
+
   function tabData() {
     var syncText = C.BACKEND_URL
       ? 'Shared backend: <strong>' + esc(C.BACKEND_URL.replace(/^https:\/\//, '').slice(0, 60)) + '…</strong> — status: ' + esc(syncState) + '. Saves publish worldwide.'
@@ -1639,7 +1700,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   adminEl.addEventListener('input', function (e) { if (e.target.matches('[data-k]') && e.target.type !== 'radio' && e.target.type !== 'checkbox' && e.target.tagName !== 'SELECT') applyField(e.target); });
   adminEl.addEventListener('change', function (e) {
     var t = e.target;
-    if (t.matches('[data-k]')) { applyField(t); if (t.getAttribute('data-k') === 'content.useStock') renderAdmin(); }
+    if (t.matches('[data-k]')) { applyField(t); var k = t.getAttribute('data-k'); if (k === 'content.useStock' || /^content\.shelves\.\d+\.source$/.test(k)) renderAdmin(); }
+    else if (t.matches('[data-shelfcat]')) { var si = +t.getAttribute('data-shelfcat'), arr = draft.content.shelves[si].categories, v = t.value, idx = arr.indexOf(v); if (t.checked) { if (idx < 0) arr.push(v); } else if (idx > -1) arr.splice(idx, 1); markDirty(); renderAdmin(); }
+    else if (t.matches('[data-shelfprod]')) { var si2 = +t.getAttribute('data-shelfprod'), arr2 = draft.content.shelves[si2].productIds, v2 = t.value, idx2 = arr2.indexOf(v2); if (t.checked) { if (idx2 < 0) arr2.push(v2); } else if (idx2 > -1) arr2.splice(idx2, 1); markDirty(); renderAdmin(); }
     else if (t.matches('[data-upload]')) { if (t.files && t.files[0]) upload(t.files[0], t.getAttribute('data-upload')); t.value = ''; }
     else if (t.matches('[data-cat-rename]')) renameCat(+t.getAttribute('data-cat-rename'), t);
     else if (t.id === 'import-file' && t.files && t.files[0]) {
@@ -1652,7 +1715,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 
   /* ---------- admin drag & drop reorder ---------- */
   var dnd = { group: null, from: -1 };
-  function dndArray(g) { return g === 'products' ? draft.products : g === 'categories' ? draft.categories : g === 'slides' ? draft.content.slides : g === 'sections' ? draft.sections : null; }
+  function dndArray(g) { return g === 'products' ? draft.products : g === 'categories' ? draft.categories : g === 'slides' ? draft.content.slides : g === 'sections' ? draft.sections : g === 'shelves' ? draft.content.shelves : null; }
   function cleanupDnd() { dnd.group = null; dnd.from = -1; $$('.dnd-dragging', adminEl).forEach(function (x) { x.classList.remove('dnd-dragging'); }); $$('.dnd-over', adminEl).forEach(function (x) { x.classList.remove('dnd-over'); }); }
   // Stop a click on the grip from toggling a <details>
   adminEl.addEventListener('click', function (e) { if (e.target.closest('.drag-grip')) e.preventDefault(); }, true);
@@ -1713,7 +1776,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       case 'lock': if (dirty && !confirm('Discard unsaved changes?')) return; try { sessionStorage.removeItem(SS_ADMIN); } catch (x) {} draft = clone(store); dirty = false; renderAdmin(); break;
       case 'save': save(); break;
       case 'add-product':
-        var np = { id: uid(), name: 'New piece', category: draft.categories[0] || '', price: 0, badge: 'New', isNew: true, isBest: false, onHome: true, image: '', fit: 'cover' };
+        var np = { id: uid(), name: 'New piece', category: draft.categories[0] || '', price: 0, badge: 'New', isNew: true, isBest: false, onHome: true, tags: '', image: '', fit: 'cover', pos: 'center' };
         draft.products.unshift(np); openIds[np.id] = true; markDirty(); renderAdmin(); adminEl.scrollTop = 0;
         var first = $('#' + fid('products.0.name')); if (first) { first.focus(); first.select(); }
         break;
@@ -1732,6 +1795,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       case 'add-slide': draft.content.slides.push({ eyebrow: 'New Season', title: 'A New *Chapter*', subtext: '', image: '' }); markDirty(); renderAdmin(); break;
       case 'del-slide': draft.content.slides.splice(i, 1); markDirty(); renderAdmin(); break;
       case 'add-section': draft.sections.push({ eyebrow: 'Editorial', heading: 'A new chapter', text: '', image: '', fit: 'cover', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }); markDirty(); renderAdmin(); break;
+      case 'add-shelf': draft.content.shelves.push({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: '', title: 'New Shelf', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true }); markDirty(); renderAdmin(); break;
+      case 'del-shelf': if (confirm('Remove this shelf?')) { draft.content.shelves.splice(i, 1); markDirty(); renderAdmin(); } break;
+      case 'move-shelf': swap(draft.content.shelves, i, i + (+b.getAttribute('data-d'))); markDirty(); renderAdmin(); break;
       case 'del-section': if (confirm('Remove this section?')) { draft.sections.splice(i, 1); markDirty(); renderAdmin(); } break;
       case 'clear-img':
         var inp = $('[data-k="' + b.getAttribute('data-path') + '"]', adminEl); if (inp) { inp.value = ''; applyField(inp); }
