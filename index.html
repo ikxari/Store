@@ -317,6 +317,39 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .dnd-hint{font-size:.82rem;color:var(--muted);margin:-6px 0 14px;display:flex;align-items:center;gap:8px}
 .dnd-hint svg{width:15px;height:15px;color:var(--rose-ink)}
 .cat-list li .drag-grip{height:40px}
+/* Product card dual CTA */
+.card-cta{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.card-cta .btn{margin-top:0}
+.card-cta .btn-sm{min-height:40px}
+@media (max-width:420px){.card-cta{gap:6px}}
+/* Cart drawer */
+.cartwrap{position:fixed;inset:0;z-index:110}
+.cartwrap[hidden]{display:none}
+.cart-backdrop{position:absolute;inset:0;background:rgba(6,20,16,.5);opacity:0;transition:opacity .3s}
+.cartwrap.open .cart-backdrop{opacity:1}
+.cart-panel{position:absolute;top:0;right:0;height:100%;width:min(430px,92vw);background:var(--bg);box-shadow:-24px 0 50px -30px rgba(0,0,0,.6);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.7,.2,1);overflow-y:auto}
+.cartwrap.open .cart-panel{transform:none}
+.cart-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:max(16px,env(safe-area-inset-top)) var(--pad) 14px;background:var(--bg);border-bottom:1px solid var(--line)}
+.cart-top h2{font-size:1.3rem}
+.cart-items{display:flex;flex-direction:column}
+.cart-item{display:flex;gap:14px;padding:16px var(--pad);border-bottom:1px solid var(--line)}
+.ci-thumb{flex:none;width:64px;height:80px;border-radius:8px;object-fit:cover;background:var(--blush)}
+.ci-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ci-main strong{font-size:.98rem;line-height:1.3}
+.ci-main .muted{font-size:.8rem}
+.ci-price{margin-top:4px;font-weight:500}
+.ci-right{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:10px}
+.ci-qty{display:flex;align-items:center;gap:6px}
+.ci-qty .sq{width:30px;height:30px}
+.ci-qty span{min-width:22px;text-align:center;font-weight:500}
+.ci-rm{background:none;border:0;color:var(--muted);font-size:.78rem;text-decoration:underline;padding:0;cursor:pointer}
+.ci-rm:hover{color:#B4423F}
+.cart-foot{margin-top:auto;padding:18px var(--pad) calc(20px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.cart-total{display:flex;justify-content:space-between;align-items:baseline;font-size:1.05rem}
+.cart-total strong{font-size:1.35rem}
+.cart-note{font-size:.8rem;text-align:center;margin:0}
+.cart-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:48px var(--pad);text-align:center;color:var(--muted)}
+.cart-empty .ic{width:46px;height:46px;color:var(--line)}
 .trust-item h3{font-size:.78rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
 .trust-item p{font-size:.9rem;color:var(--muted)}
 @media (max-width:760px){.trust{grid-template-columns:1fr}.trust-item{justify-content:flex-start}}
@@ -506,9 +539,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       <button class="icon-btn hide-sm" data-toast="wishlist" aria-label="Wishlist">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"></path></svg>
       </button>
-      <button class="icon-btn" data-toast="cart" aria-label="Shopping bag, 2 items">
+      <button class="icon-btn" id="cart-open" aria-label="Your bag">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 7.5h13l-1 13h-11l-1-13Z"></path><path d="M9 7.5V6a3 3 0 0 1 6 0v1.5"></path></svg>
-        <span class="count" aria-hidden="true">2</span>
+        <span class="count" id="cart-count" aria-hidden="true" hidden>0</span>
       </button>
       <button class="icon-btn" id="theme-toggle" aria-label="Toggle dark mode">
         <svg class="ic i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>
@@ -668,6 +701,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 </a>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<div class="cartwrap" id="cart" hidden="">
+  <div class="cart-backdrop" data-cart-close></div>
+  <aside class="cart-panel" role="dialog" aria-modal="true" aria-label="Your bag" id="cart-panel"></aside>
+</div>
 
 <div class="catalog" id="catalog" role="dialog" aria-modal="true" aria-label="All products" hidden=""></div>
 
@@ -898,10 +936,12 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   /* ---------- storefront render ---------- */
   var activeCat = 'All', showAllChips = false, carTimer = null;
   var I_WA = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M9.5 9.5c.5 2 2 3.5 4 4l1-1 2 1v1.5c-3.5.5-8-4-7.5-7.5H10.5l1 2Z"/></svg>';
+  var I_BAG = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 7.5h13l-1 13h-11l-1-13Z"/><path d="M9 7.5V6a3 3 0 0 1 6 0v1.5"/></svg>';
   var I_L = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
   var I_R = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
   var I_PIN = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
   var I_CLOCK = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>';
+  var I_X = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>';
   var I_PHONE = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>';
   var I_MAIL = '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>';
 
@@ -1010,7 +1050,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       '<p class="card-cat">' + esc(p.category) + '</p>' +
       '<h3 class="card-name">' + esc(p.name) + '</h3>' +
       '<p class="card-price">' + inr(p.price) + '</p>' +
-      '<a class="btn btn-wa btn-block" href="' + esc(waLink(productMsg(p))) + '" target="_blank" rel="noopener noreferrer" aria-label="Get a quote for ' + esc(p.name) + ' on WhatsApp">' + I_WA + 'Get a Quote</a>' +
+      '<div class="card-cta">' +
+      '<button class="btn btn-rose btn-block" type="button" data-add="' + esc(p.id) + '" aria-label="Add ' + esc(p.name) + ' to bag">' + I_BAG + 'Add to Cart</button>' +
+      '<a class="btn btn-ghost btn-block btn-sm" href="' + esc(waLink(productMsg(p))) + '" target="_blank" rel="noopener noreferrer" aria-label="Quick quote for ' + esc(p.name) + ' on WhatsApp">' + I_WA + 'Quick Quote</a>' +
+      '</div>' +
       '</div></article>';
   }
   function emptyState(msg) {
@@ -1181,6 +1224,48 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function openCatalog() { var el = $('#catalog'); if (!el) return; el.hidden = false; document.documentElement.classList.add('locked'); renderCatalog(); el.scrollTop = 0; }
   function closeCatalog() { var el = $('#catalog'); if (!el) return; el.hidden = true; el.innerHTML = ''; document.documentElement.classList.remove('locked'); if (location.hash === '#shop-all') history.replaceState(null, '', location.pathname + location.search); }
 
+  /* ---------- cart (bag) — order via WhatsApp quote ---------- */
+  var LS_CART = 'ikxari_cart_v1', cart = {};
+  try { cart = JSON.parse(localStorage.getItem(LS_CART) || '{}') || {}; } catch (e) { cart = {}; }
+  function saveCart() { try { localStorage.setItem(LS_CART, JSON.stringify(cart)); } catch (e) {} }
+  function prodById(id) { for (var i = 0; i < store.products.length; i++) if (store.products[i].id === id) return store.products[i]; return null; }
+  function pruneCart() { var ch = false; for (var id in cart) { if (!prodById(id) || cart[id] < 1) { delete cart[id]; ch = true; } } if (ch) saveCart(); }
+  function cartItems() { var out = []; for (var id in cart) { var p = prodById(id); if (p) out.push({ p: p, qty: cart[id] }); } return out; }
+  function cartCount() { pruneCart(); var n = 0; for (var k in cart) n += cart[k]; return n; }
+  function cartTotal() { var t = 0; cartItems().forEach(function (x) { t += (Number(x.p.price) || 0) * x.qty; }); return t; }
+  function renderCartCount() { var el = $('#cart-count'); if (!el) return; var n = cartCount(); el.textContent = n; el.hidden = n === 0; var btn = $('#cart-open'); if (btn) btn.setAttribute('aria-label', 'Your bag, ' + n + (n === 1 ? ' item' : ' items')); }
+  function addToCart(id) { var p = prodById(id); if (!p) return; cart[id] = (cart[id] || 0) + 1; saveCart(); renderCartCount(); if (!$('#cart').hidden) renderCart(); toast(p.name + ' added to your bag'); }
+  function setQty(id, q) { if (q <= 0) delete cart[id]; else cart[id] = q; saveCart(); renderCartCount(); renderCart(); }
+  function cartWaLink() {
+    var items = cartItems();
+    var lines = items.map(function (x, i) { return (i + 1) + '. ' + x.p.name + ' (' + x.p.category + ') ×' + x.qty + ' — ₹' + num((Number(x.p.price) || 0) * x.qty); });
+    var msg = "Hello IKXARI, I'd like to place this order:\n\n" + lines.join('\n') + '\n\nTotal: ₹' + num(cartTotal()) + '\n\nPlease confirm availability, sizes and the final price.';
+    return 'https://wa.me/' + waNumber() + '?text=' + encodeURIComponent(msg);
+  }
+  function renderCart() {
+    var el = $('#cart-panel'); if (!el) return;
+    var items = cartItems(), body;
+    if (!items.length) {
+      body = '<div class="cart-empty">' + I_BAG + '<p>Your bag is empty.</p><button class="btn btn-rose btn-sm" type="button" data-cart-close>Browse products</button></div>';
+    } else {
+      body = '<div class="cart-items">' + items.map(function (x) {
+        var p = x.p;
+        return '<div class="cart-item" data-ci="' + esc(p.id) + '">' +
+          '<img class="ci-thumb" src="' + esc(imgSrc(p.image, productKw(p), lockOf(p.id), 120, 150, store.content.useStock)) + '" alt="" onerror="ikxFallback(this)">' +
+          '<div class="ci-main"><strong>' + esc(p.name) + '</strong><span class="muted">' + esc(p.category) + '</span><span class="ci-price">' + inr((Number(p.price) || 0) * x.qty) + '</span></div>' +
+          '<div class="ci-right"><div class="ci-qty"><button class="sq" type="button" data-dec="' + esc(p.id) + '" aria-label="Decrease quantity">−</button><span>' + x.qty + '</span><button class="sq" type="button" data-inc="' + esc(p.id) + '" aria-label="Increase quantity">+</button></div>' +
+          '<button class="ci-rm" type="button" data-rm="' + esc(p.id) + '">Remove</button></div></div>';
+      }).join('') + '</div>' +
+        '<div class="cart-foot"><div class="cart-total"><span>Total</span><strong>' + inr(cartTotal()) + '</strong></div>' +
+        '<a class="btn btn-wa btn-block" href="' + esc(cartWaLink()) + '" target="_blank" rel="noopener noreferrer">' + I_WA + 'Order on WhatsApp</a>' +
+        '<button class="btn btn-ghost btn-block btn-sm" type="button" data-cart-clear>Clear bag</button>' +
+        '<p class="cart-note muted">Every order is confirmed personally on WhatsApp.</p></div>';
+    }
+    el.innerHTML = '<div class="cart-top"><h2>Your Bag</h2><button class="icon-btn" type="button" data-cart-close aria-label="Close bag">' + I_X + '</button></div>' + body;
+  }
+  function openCart() { renderCart(); var c = $('#cart'); c.hidden = false; document.documentElement.classList.add('locked'); requestAnimationFrame(function () { c.classList.add('open'); }); }
+  function closeCart() { var c = $('#cart'); c.classList.remove('open'); document.documentElement.classList.remove('locked'); setTimeout(function () { c.hidden = true; }, 300); }
+
   function renderWaLinks() {
     $$('[data-wa]').forEach(function (a) { a.href = waLink(WA_MSG[a.getAttribute('data-wa')] || WA_MSG.general); });
   }
@@ -1192,7 +1277,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     renderShop(); renderAtelier();
     renderGrid('#grid-best', store.products.filter(function (p) { return p.isBest; }).slice(0, limit), 'Bestsellers coming soon.');
     renderSections(); renderTrust(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
+    renderCartCount();
     if (!$('#catalog').hidden) renderCatalog();
+    if (!$('#cart').hidden) renderCart();
   }
 
   /* ---------- storefront interactions ---------- */
@@ -1202,6 +1289,19 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   $('#catalog').addEventListener('click', function (e) {
     var cl = e.target.closest('[data-cat-close]'); if (cl) { closeCatalog(); return; }
     var c = e.target.closest('[data-ccat]'); if (c) { catalogCat = c.getAttribute('data-ccat'); renderCatalog(); }
+  });
+
+  // Cart (bag)
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-add]'); if (a) { e.preventDefault(); addToCart(a.getAttribute('data-add')); }
+  });
+  var cartOpenBtn = $('#cart-open'); if (cartOpenBtn) cartOpenBtn.addEventListener('click', openCart);
+  $('#cart').addEventListener('click', function (e) {
+    if (e.target.closest('[data-cart-close]')) { closeCart(); return; }
+    var inc = e.target.closest('[data-inc]'); if (inc) { var id = inc.getAttribute('data-inc'); setQty(id, (cart[id] || 0) + 1); return; }
+    var dec = e.target.closest('[data-dec]'); if (dec) { var id2 = dec.getAttribute('data-dec'); setQty(id2, (cart[id2] || 0) - 1); return; }
+    var rm = e.target.closest('[data-rm]'); if (rm) { setQty(rm.getAttribute('data-rm'), 0); return; }
+    if (e.target.closest('[data-cart-clear]')) { if (confirm('Clear your bag?')) { cart = {}; saveCart(); renderCartCount(); renderCart(); } }
   });
 
   var themeBtn = $('#theme-toggle');
@@ -1228,7 +1328,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   menuOpenBtn.addEventListener('click', openMenu);
   $('#menu-close').addEventListener('click', closeMenu);
   mmenu.addEventListener('click', function (e) { if (e.target.closest('a')) closeMenu(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMenu(); if (!$('#catalog').hidden) closeCatalog(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMenu(); if (!$('#catalog').hidden) closeCatalog(); if (!$('#cart').hidden) closeCart(); } });
   window.addEventListener('resize', function () { if (window.innerWidth > 1366) closeMenu(); });
 
   var toastEl = $('#toast'), toastT;
