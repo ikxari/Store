@@ -23,7 +23,7 @@
                      /images/your-file.jpg — Vercel serves them via its CDN.
    ===================================================================== */
 window.IKXARI_CONFIG = {
-  BACKEND_URL: "",
+  BACKEND_URL: "https://script.google.com/macros/s/AKfycbxDnH6czZuYoCnTN30bRuI8sMJua42MHcp-qNQS3ct24IrpG5Lf6arAAQSWHxmB5uQ5rw/exec",
   WHATSAPP_NUMBER: "919046262572",
   ADMIN_PIN: "1234",
   CLOUDINARY_CLOUD_NAME: "",
@@ -50,14 +50,14 @@ window.IKXARI_CONFIG = {
 <link rel="icon" href="https://ikxari-swart.vercel.app/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Marcellus&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#FAF7F2;--surface:#FFFFFF;--blush:#E9F0EC;--text:#17241F;--muted:#6E817A;--line:#DEE8E3;
   --rose:#0B5E4A;--rose-h:#084A3A;--rose-ink:#0B5E4A;--rose-l:#C9A86A;--bar:#05322C;--bar-text:#F3EEE8;
   --wa:#178A45;--wa-h:#12743A;
   --shadow:0 20px 44px -24px rgba(10,40,33,.34);
-  --r:16px;--r-sm:10px;--pill:999px;--maxw:1320px;--pad:clamp(16px,4vw,48px);
+  --r:16px;--r-sm:10px;--pill:999px;--maxw:100%;--pad:clamp(16px,4vw,56px);--font-head:'Jost';
   color-scheme:light;
 }
 html[data-theme="dark"]{
@@ -77,7 +77,8 @@ svg,iframe,video{max-width:100%}
 a{color:inherit}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
-h1,h2,h3,h4{font-weight:600;line-height:1.1;margin:0;letter-spacing:-.01em}
+h1,h2,h3,h4{font-family:var(--font-head),'Jost',serif;font-weight:600;line-height:1.1;margin:0;letter-spacing:-.01em}
+.card-name,.crm-name,.tile h3{font-family:var(--font-head),'Jost',serif}
 p{margin:0}
 :focus-visible{outline:2px solid var(--rose);outline-offset:3px;border-radius:6px}
 .sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
@@ -122,6 +123,9 @@ p{margin:0}
 .nav a::after{content:"";position:absolute;left:0;right:100%;bottom:2px;height:1px;background:var(--rose);transition:right .3s}
 .nav a:hover::after{right:0}
 .logo{display:flex;flex-direction:column;align-items:center;text-decoration:none;line-height:1}
+#brand-logo[data-align="left"]{align-items:flex-start}
+#brand-logo[data-align="right"]{align-items:flex-end}
+.brand-logo-img{display:block;width:auto;max-width:200px;object-fit:contain}
 .logo-mark{font-size:1.75rem;font-weight:600;letter-spacing:.34em;margin-right:-.34em}
 .logo-tag{margin-top:7px;font-size:.6rem;font-weight:400;letter-spacing:.42em;margin-right:-.42em;text-transform:uppercase;color:var(--muted)}
 .actions{display:flex;align-items:center;justify-content:flex-end;gap:2px}
@@ -140,7 +144,7 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
   .logo-tag{font-size:.54rem;letter-spacing:.34em;margin-right:-.34em}
   .icon-btn{width:40px;height:40px}
 }
-@media (max-width:1200px){
+@media (max-width:1366px){
   .nav{display:none}
   .menu-btn{display:inline-grid}
   .header-inner{min-height:68px;gap:8px}
@@ -288,6 +292,17 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .trust{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;padding-block:40px;border-block:1px solid var(--line)}
 .trust-item{display:flex;align-items:center;justify-content:center;gap:16px}
 .trust-ic{display:grid;place-items:center;flex:none;width:52px;height:52px;border-radius:var(--pill);background:var(--blush);color:var(--rose-ink)}
+.trust-emoji{display:grid;place-items:center;flex:none;width:52px;height:52px;border-radius:var(--pill);background:var(--blush);font-size:1.5rem;line-height:1}
+.split-media.is-video{background:#000}
+.split-media.is-video iframe,.split-media.is-video video{width:100%;height:100%;border:0;display:block;object-fit:cover}
+.shop-viewall{display:flex;justify-content:center;margin-top:clamp(28px,4vw,48px)}
+#promise[hidden]{display:none}
+/* Catalog (all products) */
+.catalog{position:fixed;inset:0;z-index:100;overflow-y:auto;background:var(--bg);-webkit-overflow-scrolling:touch}
+.catalog[hidden]{display:none}
+.cat-top{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(12px,env(safe-area-inset-top)) var(--pad) 12px;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.cat-body{padding-top:28px;padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+.cat-body .chips{margin-bottom:18px}
 .trust-item h3{font-size:.78rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
 .trust-item p{font-size:.9rem;color:var(--muted)}
 @media (max-width:760px){.trust{grid-template-columns:1fr}.trust-item{justify-content:flex-start}}
@@ -469,10 +484,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         <a href="index.html">Our Story</a>
       </nav>
     </div>
-    <a class="logo" href="index.html" aria-label="IKXARI — Beyond Fashion, home">
-      <span class="logo-mark">IKXARI</span>
-      <span class="logo-tag">Beyond Fashion</span>
-    </a>
+    <a class="logo" id="brand-logo" href="index.html" aria-label="IKXARI home"></a>
     <div class="actions">
       <button class="icon-btn hide-sm" data-toast="account" aria-label="Account">
         <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"></path></svg>
@@ -494,7 +506,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 
 <div class="mmenu" id="mmenu" role="dialog" aria-modal="true" aria-label="Menu" inert="">
   <div class="mmenu-top">
-    <span class="logo" style="align-items:flex-start"><span class="logo-mark" style="margin-right:0">IKXARI</span></span>
+    <span class="logo" id="brand-mmenu" style="align-items:flex-start"></span>
     <button class="icon-btn" id="menu-close" aria-label="Close menu">
       <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>
     </button>
@@ -548,6 +560,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       <div class="chips" id="chips" role="group" aria-label="Filter by category"></div>
       <p class="result-count" id="shop-count" aria-live="polite"></p>
       <div class="grid" id="grid-shop"></div>
+      <div class="shop-viewall" id="shop-viewall" hidden><button class="btn btn-rose" type="button" id="view-all-products">View All Products</button></div>
     </div>
   </section>
 
@@ -575,21 +588,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     <div class="container"><div class="panel" id="contact-inner"></div></div>
   </section>
 
-  <section class="container" aria-label="Our promise">
-    <div class="trust">
-      <div class="trust-item">
-        <span class="trust-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"></path><path d="M15 18H9"></path><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"></path><circle cx="17" cy="18" r="2"></circle><circle cx="7" cy="18" r="2"></circle></svg></span>
-        <div><h3>Complimentary Shipping</h3><p>On orders over ₹10,000</p></div>
-      </div>
-      <div class="trust-item">
-        <span class="trust-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg></span>
-        <div><h3>14-Day Returns</h3><p>Easy, considered exchanges</p></div>
-      </div>
-      <div class="trust-item">
-        <span class="trust-ic"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12 12 12"></path><path d="M20 4 8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8 20 20"></path></svg></span>
-        <div><h3>Atelier Crafted</h3><p>Hand-finished in small numbers</p></div>
-      </div>
-    </div>
+  <section class="container" aria-label="Our promise" id="promise">
+    <div class="trust" id="trust-grid"></div>
   </section>
 </main>
 
@@ -597,15 +597,17 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   <div class="container">
     <div class="footer-top">
       <div class="footer-brand">
-        <a class="logo" href="index.html" aria-label="IKXARI home"><span class="logo-mark">IKXARI</span><span class="logo-tag">Beyond Fashion</span></a>
-        <h3>Join the House</h3>
-        <p class="muted">First access to new collections, private previews and atelier stories.</p>
-        <form class="news" id="news-form" novalidate="">
-          <label for="news-email" class="sr-only">Email address</label>
-          <input id="news-email" type="email" placeholder="Your email address" autocomplete="email" required="">
-          <button class="btn btn-rose" type="submit">Subscribe</button>
-        </form>
-        <p class="news-msg" id="news-msg" aria-live="polite"></p>
+        <a class="logo" id="brand-footer" href="index.html" aria-label="IKXARI home"></a>
+        <div id="newsletter-block" hidden>
+          <h3>Join the House</h3>
+          <p class="muted">First access to new collections, private previews and atelier stories.</p>
+          <form class="news" id="news-form" novalidate="">
+            <label for="news-email" class="sr-only">Email address</label>
+            <input id="news-email" type="email" placeholder="Your email address" autocomplete="email" required="">
+            <button class="btn btn-rose" type="submit">Subscribe</button>
+          </form>
+          <p class="news-msg" id="news-msg" aria-live="polite"></p>
+        </div>
         <div class="footer-contact" id="footer-contact"></div>
       </div>
       <div class="footer-col">
@@ -650,6 +652,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<div class="catalog" id="catalog" role="dialog" aria-modal="true" aria-label="All products" hidden=""></div>
+
 <div class="admin" id="admin" role="dialog" aria-modal="true" aria-label="IKXARI Admin" hidden=""></div>
 
 <script>
@@ -667,6 +671,18 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       whatsapp: C.WHATSAPP_NUMBER,
       heroStyle: 'split',
       useStock: false,
+      headingFont: 'Jost',
+      showNewsletter: false,
+      homeLimit: 6,
+      branding: {
+        mode: 'text',
+        logo: '',
+        logoHeight: 40,
+        title: 'IKXARI',
+        tagline: 'Beyond Fashion',
+        showTagline: true,
+        align: 'center'
+      },
       hero: {
         eyebrow: 'Autumn / Winter 2026',
         titleBefore: 'The',
@@ -708,7 +724,12 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         whatsapp: '919046262572',
         email: 'care@ikxari.com',
         note: 'Your dedicated point of contact for styling advice, custom orders, sizing and order updates. Message anytime — she replies personally.'
-      }
+      },
+      trust: [
+        { emoji: '🚚', title: 'Complimentary Shipping', text: 'On orders over ₹10,000' },
+        { emoji: '↩️', title: '14-Day Returns', text: 'Easy, considered exchanges' },
+        { emoji: '✂️', title: 'Atelier Crafted', text: 'Hand-finished in small numbers' }
+      ]
     },
     categories: CATEGORIES.slice(),
     collections: [
@@ -767,7 +788,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   }
   function imgSrc(url, kw, lock, w, h, useStock) {
     if (useStock === undefined) useStock = store.content.useStock;
-    if (url && isSafeUrl(url)) return String(url).trim();
+    if (url && isSafeUrl(url)) return toDirectImg(String(url).trim());
     if (useStock) return 'https://loremflickr.com/' + w + '/' + h + '/' + (kw || 'fashion,woman') + '?lock=' + lock;
     return w > h ? FALLBACK_WIDE : FALLBACK;
   }
@@ -782,26 +803,44 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   }
   function productKw(p) { return KW[p.category] || 'fashion,woman'; }
 
+  /* ---------- media / drive helpers ---------- */
+  function driveId(u) { var s = String(u || ''); var m = s.match(/\/d\/([-\w]{10,})/) || s.match(/[?&]id=([-\w]{10,})/); return m ? m[1] : ''; }
+  function toDirectImg(u) { u = String(u || '').trim(); if (/drive\.google\.com/i.test(u)) { var id = driveId(u); if (id) return 'https://lh3.googleusercontent.com/d/' + id; } return u; }
+  function ytId(u) { var m = String(u || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([-\w]{11})/); return m ? m[1] : ''; }
+  function videoHtml(url, fit) {
+    url = String(url || '').trim();
+    if (!url || !isSafeUrl(url)) return '';
+    var yt = ytId(url);
+    if (yt) return '<iframe src="https://www.youtube.com/embed/' + esc(yt) + '" title="Video" loading="lazy" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>';
+    if (/drive\.google\.com/i.test(url)) { var id = driveId(url); if (id) return '<iframe src="https://drive.google.com/file/d/' + esc(id) + '/preview" title="Video" loading="lazy" allow="autoplay" allowfullscreen></iframe>'; }
+    if (/\.(mp4|webm|ogg)(\?|$)/i.test(url)) return '<video src="' + esc(url) + '" controls playsinline preload="metadata" style="object-fit:' + (fit === 'contain' ? 'contain' : 'cover') + '"></video>';
+    return '';
+  }
+
   function normalize(d) {
     d = d || {};
     var D = clone(DEFAULTS), c = d.content || {};
     var out = {
       version: 1,
       content: Object.assign({}, D.content, c, {
+        branding: Object.assign({}, D.content.branding, c.branding || {}),
         hero: Object.assign({}, D.content.hero, c.hero || {}),
         atelier: Object.assign({}, D.content.atelier, c.atelier || {}),
         contact: Object.assign({}, D.content.contact, c.contact || {}),
         crm: Object.assign({}, D.content.crm, c.crm || {}),
-        slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover' }, s); }) : D.content.slides
+        slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover' }, s); }) : D.content.slides,
+        trust: Array.isArray(c.trust) && c.trust.length ? c.trust.map(function (t) { return Object.assign({ emoji: '', title: '', text: '' }, t); }) : clone(D.content.trust)
       }),
       categories: Array.isArray(d.categories) && d.categories.length ? d.categories.map(String) : D.categories,
       collections: D.collections.map(function (def, i) { return Object.assign({}, def, (d.collections || [])[i] || {}); }),
-      sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover', align: 'left' }, s); }) : [],
+      sections: Array.isArray(d.sections) ? d.sections.map(function (s) { return Object.assign({ eyebrow: '', heading: '', text: '', image: '', fit: 'cover', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }, s); }) : [],
       products: Array.isArray(d.products) ? d.products.map(function (p) {
-        return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, image: '', fit: 'cover' }, p, { price: Number(p.price) || 0 });
+        return Object.assign({ id: uid(), name: '', category: '', price: 0, badge: '', isNew: false, isBest: false, onHome: true, image: '', fit: 'cover' }, p, { price: Number(p.price) || 0 });
       }) : D.products
     };
     if (!['split', 'banner', 'carousel'].includes(out.content.heroStyle)) out.content.heroStyle = 'split';
+    if (['Jost', 'Cormorant Garamond', 'Playfair Display', 'Marcellus'].indexOf(out.content.headingFont) === -1) out.content.headingFont = 'Jost';
+    out.content.homeLimit = Math.max(1, Math.min(48, Number(out.content.homeLimit) || 6));
     return out;
   }
 
@@ -956,17 +995,15 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   function renderGrid(sel, list, msg) { $(sel).innerHTML = list.length ? list.map(card).join('') : emptyState(msg); }
 
   function renderShop() {
-    if (activeCat !== 'All' && store.categories.indexOf(activeCat) === -1) activeCat = 'All';
-    var cats = store.categories, LIMIT = 10;
-    var visible = showAllChips ? cats : cats.slice(0, LIMIT);
-    if (!showAllChips && activeCat !== 'All' && visible.indexOf(activeCat) === -1) visible = visible.concat(activeCat);
-    var chip = function (c) { return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + (c === activeCat) + '">' + esc(c) + '</button>'; };
-    var html = chip('All') + visible.map(chip).join('');
-    if (cats.length > LIMIT) html += '<button type="button" class="chip chip-more" data-more aria-expanded="' + showAllChips + '">' + (showAllChips ? 'Show less' : '+' + (cats.length - LIMIT) + ' more') + '</button>';
-    $('#chips').innerHTML = html;
-    var list = activeCat === 'All' ? store.products : store.products.filter(function (p) { return p.category === activeCat; });
-    $('#shop-count').textContent = list.length + (list.length === 1 ? ' piece' : ' pieces') + (activeCat === 'All' ? '' : ' in ' + activeCat);
-    renderGrid('#grid-shop', list, 'No pieces in ' + esc(activeCat) + ' yet.');
+    // Home shows only the products flagged "Show on home", capped at homeLimit.
+    var limit = store.content.homeLimit || 6;
+    var home = store.products.filter(function (p) { return p.onHome; });
+    if (!home.length) home = store.products.slice();
+    var shown = home.slice(0, limit);
+    var chipsEl = $('#chips'); if (chipsEl) { chipsEl.hidden = true; chipsEl.innerHTML = ''; }
+    var cnt = $('#shop-count'); if (cnt) cnt.hidden = true;
+    renderGrid('#grid-shop', shown, 'No pieces yet.');
+    var va = $('#shop-viewall'); if (va) va.hidden = store.products.length <= shown.length;
   }
 
   function renderAtelier() {
@@ -1047,33 +1084,100 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 
   function renderSections() {
     $('#custom-sections').innerHTML = store.sections.map(function (s, i) {
+      var media;
+      if (s.mediaType === 'video') {
+        var vh = videoHtml(s.videoUrl, s.fit);
+        media = vh ? '<div class="split-media is-video">' + vh + '</div>'
+          : '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit }) + '</div>';
+      } else {
+        media = '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit }) + '</div>';
+      }
+      var btn;
+      if (s.buttonLabel) {
+        var href = (s.buttonUrl && isSafeUrl(s.buttonUrl)) ? s.buttonUrl : waLink(WA_MSG.general);
+        btn = '<a class="btn btn-wa" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + esc(s.buttonLabel) + '</a>';
+      } else {
+        btn = '<a class="btn btn-wa" href="' + esc(waLink(WA_MSG.general)) + '" target="_blank" rel="noopener noreferrer">' + I_WA + 'Get a Quote</a>';
+      }
       return '<section class="section tight" aria-label="' + esc(s.heading) + '"><div class="container"><div class="split' + (i % 2 === 0 ? ' reverse' : '') + '">' +
-        '<div class="split-media">' + imgTag({ url: s.image, kw: 'fashion,editorial', lock: 90 + i, w: 900, h: 1100, alt: '', fit: s.fit }) + '</div>' +
+        media +
         '<div class="split-copy" data-align="' + esc(s.align || 'left') + '">' + (s.eyebrow ? '<span class="eyebrow">' + esc(s.eyebrow) + '</span>' : '') +
         '<h2>' + esc(s.heading) + '</h2>' + (s.text ? '<p class="body">' + esc(s.text) + '</p>' : '') +
-        '<a class="btn btn-wa" href="' + esc(waLink(WA_MSG.general)) + '" target="_blank" rel="noopener noreferrer">' + I_WA + 'Get a Quote</a>' +
+        btn +
         '</div></div></div></section>';
     }).join('');
   }
+
+  /* ---------- branding / trust ---------- */
+  function brandHtml(bd, forFooter) {
+    if (bd.mode === 'logo' && bd.logo && isSafeUrl(bd.logo)) {
+      return '<img class="brand-logo-img" src="' + esc(toDirectImg(bd.logo)) + '" alt="' + esc(bd.title || 'IKXARI') + '" style="height:' + (Number(bd.logoHeight) || 40) + 'px" onerror="ikxFallback(this)">';
+    }
+    return '<span class="logo-mark"' + (forFooter ? ' style="margin-right:0"' : '') + '>' + esc(bd.title || 'IKXARI') + '</span>' +
+      (bd.showTagline && bd.tagline ? '<span class="logo-tag">' + esc(bd.tagline) + '</span>' : '');
+  }
+  function renderBranding() {
+    var bd = store.content.branding || {};
+    var hdr = $('#brand-logo');
+    if (hdr) { hdr.innerHTML = brandHtml(bd, false); hdr.setAttribute('data-align', bd.align || 'center'); hdr.setAttribute('aria-label', (bd.title || 'IKXARI') + ' home'); }
+    var ft = $('#brand-footer'); if (ft) ft.innerHTML = brandHtml(bd, true);
+    var mm = $('#brand-mmenu'); if (mm) mm.innerHTML = '<span class="logo-mark" style="margin-right:0">' + esc(bd.title || 'IKXARI') + '</span>';
+    try { document.title = (bd.title || 'IKXARI') + (bd.tagline ? ' — ' + bd.tagline : ''); } catch (e) {}
+    document.documentElement.style.setProperty('--font-head', "'" + (store.content.headingFont || 'Jost') + "'");
+    var nl = $('#newsletter-block'); if (nl) nl.hidden = !store.content.showNewsletter;
+  }
+  function renderTrust() {
+    var el = $('#trust-grid'); if (!el) return;
+    var items = store.content.trust || [];
+    if (!items.length) { el.closest('#promise').hidden = true; return; }
+    el.closest('#promise').hidden = false;
+    el.innerHTML = items.map(function (t) {
+      return '<div class="trust-item"><span class="trust-emoji" aria-hidden="true">' + esc(t.emoji || '✦') + '</span>' +
+        '<div><h3>' + esc(t.title) + '</h3>' + (t.text ? '<p>' + esc(t.text) + '</p>' : '') + '</div></div>';
+    }).join('');
+  }
+
+  /* ---------- catalog (all products page) ---------- */
+  var catalogCat = 'All';
+  function renderCatalog() {
+    var el = $('#catalog'); if (!el) return;
+    var cats = store.categories;
+    if (catalogCat !== 'All' && cats.indexOf(catalogCat) === -1) catalogCat = 'All';
+    var chip = function (c) { return '<button type="button" class="chip" data-ccat="' + esc(c) + '" aria-pressed="' + (c === catalogCat) + '">' + esc(c) + '</button>'; };
+    var list = catalogCat === 'All' ? store.products : store.products.filter(function (p) { return p.category === catalogCat; });
+    el.innerHTML =
+      '<div class="cat-top"><div class="adm-brand"><span class="logo-mark">' + esc((store.content.branding && store.content.branding.title) || 'IKXARI') + '</span><span>All Products</span></div>' +
+      '<button class="btn btn-sm btn-outline" type="button" data-cat-close>Close</button></div>' +
+      '<div class="cat-body container">' +
+      '<div class="chips">' + chip('All') + cats.map(chip).join('') + '</div>' +
+      '<p class="result-count">' + list.length + (list.length === 1 ? ' piece' : ' pieces') + (catalogCat === 'All' ? '' : ' in ' + esc(catalogCat)) + '</p>' +
+      '<div class="grid">' + (list.length ? list.map(card).join('') : emptyState('No pieces in ' + esc(catalogCat) + ' yet.')) + '</div>' +
+      '</div>';
+  }
+  function openCatalog() { var el = $('#catalog'); if (!el) return; el.hidden = false; document.documentElement.classList.add('locked'); renderCatalog(); el.scrollTop = 0; }
+  function closeCatalog() { var el = $('#catalog'); if (!el) return; el.hidden = true; el.innerHTML = ''; document.documentElement.classList.remove('locked'); if (location.hash === '#shop-all') history.replaceState(null, '', location.pathname + location.search); }
 
   function renderWaLinks() {
     $$('[data-wa]').forEach(function (a) { a.href = waLink(WA_MSG[a.getAttribute('data-wa')] || WA_MSG.general); });
   }
 
   function renderAll() {
-    renderAnnouncement(); renderHero(); renderCollections();
-    renderGrid('#grid-new', store.products.filter(function (p) { return p.isNew; }), 'New arrivals are on their way.');
+    var limit = store.content.homeLimit || 6;
+    renderBranding(); renderAnnouncement(); renderHero(); renderCollections();
+    renderGrid('#grid-new', store.products.filter(function (p) { return p.isNew; }).slice(0, limit), 'New arrivals are on their way.');
     renderShop(); renderAtelier();
-    renderGrid('#grid-best', store.products.filter(function (p) { return p.isBest; }), 'Bestsellers coming soon.');
-    renderSections(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
+    renderGrid('#grid-best', store.products.filter(function (p) { return p.isBest; }).slice(0, limit), 'Bestsellers coming soon.');
+    renderSections(); renderTrust(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
+    if (!$('#catalog').hidden) renderCatalog();
   }
 
   /* ---------- storefront interactions ---------- */
-  $('#chips').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    if (b.hasAttribute('data-more')) { showAllChips = !showAllChips; renderShop(); $('#chips [data-more]').focus(); return; }
-    activeCat = b.getAttribute('data-cat'); renderShop();
-    var again = $('#chips [data-cat="' + CSS.escape(activeCat) + '"]'); if (again) again.focus();
+  // Catalog (all products) open/close + filter
+  var viewAllBtn = $('#view-all-products');
+  if (viewAllBtn) viewAllBtn.addEventListener('click', function () { location.hash = '#shop-all'; openCatalog(); });
+  $('#catalog').addEventListener('click', function (e) {
+    var cl = e.target.closest('[data-cat-close]'); if (cl) { closeCatalog(); return; }
+    var c = e.target.closest('[data-ccat]'); if (c) { catalogCat = c.getAttribute('data-ccat'); renderCatalog(); }
   });
 
   var themeBtn = $('#theme-toggle');
@@ -1100,8 +1204,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   menuOpenBtn.addEventListener('click', openMenu);
   $('#menu-close').addEventListener('click', closeMenu);
   mmenu.addEventListener('click', function (e) { if (e.target.closest('a')) closeMenu(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeMenu(); });
-  window.addEventListener('resize', function () { if (window.innerWidth > 1200) closeMenu(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeMenu(); if (!$('#catalog').hidden) closeCatalog(); } });
+  window.addEventListener('resize', function () { if (window.innerWidth > 1366) closeMenu(); });
 
   var toastEl = $('#toast'), toastT;
   function toast(msg) { toastEl.textContent = msg; toastEl.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 3200); }
@@ -1154,7 +1258,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     adminEl.hidden = true; adminEl.innerHTML = ''; document.documentElement.classList.remove('locked'); draft = null; dirty = false;
     if (location.hash === '#admin') history.replaceState(null, '', location.pathname + location.search);
   }
-  window.addEventListener('hashchange', function () { if (location.hash === '#admin') openAdmin(); });
+  window.addEventListener('hashchange', function () {
+    if (location.hash === '#admin') openAdmin();
+    else if (location.hash === '#shop-all') { if ($('#catalog').hidden) openCatalog(); }
+    else if (!$('#catalog').hidden) closeCatalog();
+  });
 
   function renderGate() {
     adminEl.innerHTML = '<div class="gate"><div class="gate-card">' +
@@ -1246,7 +1354,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
           '<div class="row">' + fSelect(b + '.category', 'Category', catOptions()) +
           fText(b + '.price', 'Price (₹)', { type: 'number', attrs: 'min="0" step="100" inputmode="numeric"' }) +
           fSelect(b + '.badge', 'Badge', [['', 'None'], ['New', 'New'], ['Bestseller', 'Bestseller']]) + '</div>' +
-          '<div class="checks">' + fCheck(b + '.isNew', 'Show in New Arrivals') + fCheck(b + '.isBest', 'Show in Bestsellers') + '</div>' +
+          '<div class="checks">' + fCheck(b + '.onHome', 'Show on home') + fCheck(b + '.isNew', 'Show in New Arrivals') + fCheck(b + '.isBest', 'Show in Bestsellers') + '</div>' +
           fImage(b + '.image', 'Product image', productKw(p), lockOf(p.id)) +
           fSelect(b + '.fit', 'Image fit', [['cover', 'Cover — fill the frame'], ['contain', 'Contain — show the whole image']]) +
           '<div class="item-actions"><div class="grp">' +
@@ -1273,6 +1381,16 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     var s = draft.content.heroStyle;
     var radio = function (v, t, d) { return '<label class="radio"><input type="radio" name="herostyle" value="' + v + '" data-k="content.heroStyle"' + (s === v ? ' checked' : '') + '><span><strong>' + t + '</strong><small>' + d + '</small></span></label>'; };
     return '<div class="adm-head"><h2>Content</h2></div>' +
+      '<div class="adm-card"><h3>Branding — Logo, Title, Tagline</h3>' +
+      '<div class="row">' + fSelect('content.branding.mode', 'Logo type', [['text', 'Text (title + tagline)'], ['logo', 'Image logo']]) + fSelect('content.branding.align', 'Logo alignment', [['center', 'Center'], ['left', 'Left'], ['right', 'Right']]) + '</div>' +
+      '<div class="row">' + fText('content.branding.title', 'Title / brand name') + fText('content.branding.tagline', 'Tagline') + '</div>' +
+      '<div class="checks" style="margin-bottom:14px">' + fCheck('content.branding.showTagline', 'Show tagline') + '</div>' +
+      fImage('content.branding.logo', 'Logo image (used when Logo type = Image)', 'logo', 5) +
+      fText('content.branding.logoHeight', 'Logo height (px)', { type: 'number', attrs: 'min="16" max="120" step="2" inputmode="numeric"' }) + '</div>' +
+      '<div class="adm-card"><h3>Design & Layout</h3>' +
+      fSelect('content.headingFont', 'Heading font (body stays Jost)', [['Jost', 'Jost (default)'], ['Cormorant Garamond', 'Cormorant Garamond — serif'], ['Playfair Display', 'Playfair Display — serif'], ['Marcellus', 'Marcellus — serif']]) +
+      fText('content.homeLimit', 'Products shown on home (then “View All”)', { type: 'number', attrs: 'min="1" max="48" step="1" inputmode="numeric"' }) +
+      '<div class="checks" style="margin:6px 0 0">' + fCheck('content.showNewsletter', 'Show footer newsletter (email signup)') + '</div></div>' +
       '<div class="adm-card"><h3>Announcement & WhatsApp</h3>' + fText('content.announcement', 'Announcement bar') +
       fText('content.whatsapp', 'WhatsApp number (country code, digits only)', { type: 'tel', attrs: 'inputmode="numeric" placeholder="919046262572"' }) + '</div>' +
       '<div class="adm-card"><h3>Hero style</h3><div class="radios" role="radiogroup" aria-label="Hero style">' +
@@ -1302,7 +1420,12 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       fImage('content.crm.photo', 'Photo', 'woman,portrait', 55) +
       '<div class="row">' + fText('content.crm.phone', 'Phone (for Call button)', { type: 'tel', attrs: 'inputmode="tel"' }) + fText('content.crm.whatsapp', 'WhatsApp number (digits only)', { type: 'tel', attrs: 'inputmode="numeric"' }) + '</div>' +
       fText('content.crm.email', 'Email', { type: 'email', attrs: 'inputmode="email"' }) +
-      fArea('content.crm.note', 'Short note', 3) + '</div>';
+      fArea('content.crm.note', 'Short note', 3) + '</div>' +
+      '<div class="adm-card"><h3>Promise badges (emoji)</h3><p class="note">Three badges near the bottom. Change the emoji, title and line.</p>' +
+      draft.content.trust.map(function (t, i) {
+        var b = 'content.trust.' + i;
+        return '<div class="row">' + fText(b + '.emoji', 'Emoji') + fText(b + '.title', 'Title') + fText(b + '.text', 'Line') + '</div>';
+      }).join('') + '</div>';
   }
 
   function tabCollections() {
@@ -1320,7 +1443,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       draft.sections.map(function (s, i) {
         var b = 'sections.' + i;
         return '<div class="adm-card"><div class="adm-head" style="margin-bottom:12px"><h3 style="margin:0">Section ' + (i + 1) + '</h3><button class="btn btn-sm btn-danger" type="button" data-act="del-section" data-i="' + i + '">Remove</button></div>' +
-          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.heading', 'Heading') + '</div>' + fArea(b + '.text', 'Text', 4) + '<div class="row">' + fFit(b + '.fit') + fAlign(b + '.align') + '</div>' + fImage(b + '.image', 'Image', 'fashion,editorial', 90 + i) + '</div>';
+          '<div class="row">' + fText(b + '.eyebrow', 'Eyebrow') + fText(b + '.heading', 'Heading') + '</div>' + fArea(b + '.text', 'Text', 4) +
+          '<div class="row">' + fFit(b + '.fit') + fAlign(b + '.align') + '</div>' +
+          '<div class="row">' + fSelect(b + '.mediaType', 'Media type', [['image', 'Image'], ['video', 'Video (YouTube / Drive / mp4)']]) + fText(b + '.videoUrl', 'Video URL', { type: 'url', attrs: 'inputmode="url" placeholder="YouTube / Drive / .mp4 link"' }) + '</div>' +
+          '<div class="row">' + fText(b + '.buttonLabel', 'Button label (optional)') + fText(b + '.buttonUrl', 'Button link — https / wa.me (optional)', { type: 'url', attrs: 'inputmode="url"' }) + '</div>' +
+          fImage(b + '.image', 'Image (used for Image media, or video fallback)', 'fashion,editorial', 90 + i) + '</div>';
       }).join('');
   }
 
@@ -1416,7 +1543,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       case 'lock': if (dirty && !confirm('Discard unsaved changes?')) return; try { sessionStorage.removeItem(SS_ADMIN); } catch (x) {} draft = clone(store); dirty = false; renderAdmin(); break;
       case 'save': save(); break;
       case 'add-product':
-        var np = { id: uid(), name: 'New piece', category: draft.categories[0] || '', price: 0, badge: 'New', isNew: true, isBest: false, image: '', fit: 'cover' };
+        var np = { id: uid(), name: 'New piece', category: draft.categories[0] || '', price: 0, badge: 'New', isNew: true, isBest: false, onHome: true, image: '', fit: 'cover' };
         draft.products.unshift(np); openIds[np.id] = true; markDirty(); renderAdmin(); adminEl.scrollTop = 0;
         var first = $('#' + fid('products.0.name')); if (first) { first.focus(); first.select(); }
         break;
@@ -1431,7 +1558,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         break;
       case 'add-slide': draft.content.slides.push({ eyebrow: 'New Season', title: 'A New *Chapter*', subtext: '', image: '' }); markDirty(); renderAdmin(); break;
       case 'del-slide': draft.content.slides.splice(i, 1); markDirty(); renderAdmin(); break;
-      case 'add-section': draft.sections.push({ eyebrow: 'Editorial', heading: 'A new chapter', text: '', image: '' }); markDirty(); renderAdmin(); break;
+      case 'add-section': draft.sections.push({ eyebrow: 'Editorial', heading: 'A new chapter', text: '', image: '', fit: 'cover', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }); markDirty(); renderAdmin(); break;
       case 'del-section': if (confirm('Remove this section?')) { draft.sections.splice(i, 1); markDirty(); renderAdmin(); } break;
       case 'clear-img':
         var inp = $('[data-k="' + b.getAttribute('data-path') + '"]', adminEl); if (inp) { inp.value = ''; applyField(inp); }
@@ -1503,10 +1630,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     d.content.slides.forEach(function (s, i) { chk(s.image, 'Slide ' + (i + 2)); });
     chk(d.content.atelier.image, 'Atelier image');
     d.collections.forEach(function (c) { chk(c.image, 'Collection “' + c.name + '”'); });
-    d.sections.forEach(function (s, i) { chk(s.image, 'Section ' + (i + 1)); });
+    d.sections.forEach(function (s, i) { chk(s.image, 'Section ' + (i + 1) + ' image'); chk(s.videoUrl, 'Section ' + (i + 1) + ' video'); chk(s.buttonUrl, 'Section ' + (i + 1) + ' button link'); });
     d.products.forEach(function (p) { chk(p.image, '“' + p.name + '”'); });
     chk(d.content.contact && d.content.contact.mapUrl, 'Map link');
     chk(d.content.crm && d.content.crm.photo, 'CRM photo');
+    chk(d.content.branding && d.content.branding.logo, 'Logo image');
     return bad;
   }
 
@@ -1551,6 +1679,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   renderAll();
   loadRemote();
   if (location.hash === '#admin') openAdmin();
+  else if (location.hash === '#shop-all') openCatalog();
 })();
 </script>
 
