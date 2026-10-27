@@ -308,6 +308,38 @@ html[data-theme="dark"] .i-moon,html:not([data-theme="dark"]) .i-sun{display:non
 .cat-top{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:max(12px,env(safe-area-inset-top)) var(--pad) 12px;background:color-mix(in srgb,var(--bg) 92%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .cat-body{padding-top:28px;padding-bottom:calc(60px + env(safe-area-inset-bottom))}
 .cat-body .chips{margin-bottom:18px}
+.cat-filter{display:none}
+.cat-sel-wrap{display:grid;gap:6px;margin-bottom:18px}
+.cat-sel-wrap .lbl{font-size:.68rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+@media (max-width:700px){.cat-filter{display:block}.cat-chips{display:none}}
+.cat-toolbar{display:flex;gap:12px;margin-bottom:16px}
+.cat-search{flex:1;min-width:0}
+.cat-sort{flex:none;width:auto;min-width:190px}
+@media (max-width:560px){.cat-toolbar{flex-direction:column}.cat-sort{width:100%;min-width:0}}
+/* Testimonials */
+#testimonials[hidden]{display:none}
+.tm-top{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:clamp(20px,3vw,32px)}
+.tm-info h2{font-size:clamp(1.8rem,3.4vw,2.8rem);margin:4px 0 14px}
+.tm-badge{display:inline-flex;align-items:center;gap:12px;padding:12px 18px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.tm-badge-txt{display:flex;flex-direction:column;line-height:1.3}
+.tm-badge-txt strong{font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.tm-badge-txt .muted{font-size:.82rem}
+.g-mark{flex:none}
+.stars{color:#E3A008;letter-spacing:2px;white-space:nowrap}
+.tm-nav{display:flex;gap:8px}
+.tm-nav .arrow{position:static;width:46px;height:46px;border:1px solid var(--line);background:var(--surface);color:var(--text)}
+.tm-nav .arrow:hover{background:var(--blush)}
+.tm-track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:none}
+.tm-track::-webkit-scrollbar{display:none}
+.tm-card{flex:0 0 min(360px,82vw);scroll-snap-align:start;display:flex;flex-direction:column;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+.tm-card-top{display:flex;align-items:center;justify-content:space-between}
+.tm-card-top .stars{font-size:1.05rem}
+.tm-text{color:var(--text);line-height:1.6;flex:1}
+.tm-who{display:flex;align-items:center;gap:12px;margin-top:4px}
+.tm-avatar{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:var(--blush);color:var(--rose-ink);font-weight:600}
+.tm-who strong{display:block;font-size:.95rem}
+.tm-who .muted{font-size:.8rem}
+@media (max-width:560px){.tm-nav{display:none}}
 /* Admin drag & drop */
 .drag-grip{flex:none;display:inline-grid;place-items:center;width:30px;height:38px;cursor:grab;color:var(--muted);border-radius:8px;touch-action:none}
 .drag-grip:hover{background:var(--blush);color:var(--rose-ink)}
@@ -620,6 +652,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     <div class="container"><div class="panel" id="contact-inner"></div></div>
   </section>
 
+  <section class="section tight" id="testimonials" aria-label="Reviews">
+    <div class="container"><div id="testimonials-inner"></div></div>
+  </section>
+
   <section class="container" aria-label="Our promise" id="promise">
     <div class="trust" id="trust-grid"></div>
   </section>
@@ -775,7 +811,22 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         { id: 'sh_women', eyebrow: 'The Edit', title: 'Ikxari Women', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true },
         { id: 'sh_plus', eyebrow: 'Extended Sizes', title: 'Ikxari Plus', source: 'all', tag: 'Plus', categories: [], productIds: [], limit: 8, viewAll: true },
         { id: 'sh_special', eyebrow: 'Limited Offers', title: 'Special Prices', source: 'best', tag: 'Special', categories: [], productIds: [], limit: 8, viewAll: true }
-      ]
+      ],
+      testimonials: {
+        show: true,
+        eyebrow: 'Loved on Google',
+        heading: 'What our clients say',
+        rating: '4.3',
+        count: 128,
+        link: '',
+        reviews: [
+          { name: 'Priya Sharma', rating: 5, text: 'Beautiful craftsmanship and the fit was perfect. The team guided me on WhatsApp through the whole order.' },
+          { name: 'Anjali Verma', rating: 5, text: 'My lehenga got so many compliments at the wedding. Premium quality and true to the photos.' },
+          { name: 'Sneha Das', rating: 4, text: 'Lovely fabrics and quick replies. Delivery took a little time but it was worth the wait.' },
+          { name: 'Ritu Agarwal', rating: 5, text: 'Exactly like the pictures. Will definitely order again for the festive season.' },
+          { name: 'Meena Iyer', rating: 4, text: 'Elegant designs and helpful styling advice. Happy with my saree.' }
+        ]
+      }
     },
     categories: CATEGORIES.slice(),
     collections: [
@@ -881,7 +932,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         crm: Object.assign({}, D.content.crm, c.crm || {}),
         slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover', pos: 'center' }, s); }) : D.content.slides,
         trust: Array.isArray(c.trust) && c.trust.length ? c.trust.map(function (t) { return Object.assign({ emoji: '', title: '', text: '' }, t); }) : clone(D.content.trust),
-        shelves: Array.isArray(c.shelves) ? c.shelves.map(function (sh) { return Object.assign({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: '', title: 'Section', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true }, sh, { categories: Array.isArray(sh.categories) ? sh.categories : [], productIds: Array.isArray(sh.productIds) ? sh.productIds : [], limit: Math.max(1, Math.min(48, Number(sh.limit) || 8)) }); }) : clone(D.content.shelves)
+        shelves: Array.isArray(c.shelves) ? c.shelves.map(function (sh) { return Object.assign({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: '', title: 'Section', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true }, sh, { categories: Array.isArray(sh.categories) ? sh.categories : [], productIds: Array.isArray(sh.productIds) ? sh.productIds : [], limit: Math.max(1, Math.min(48, Number(sh.limit) || 8)) }); }) : clone(D.content.shelves),
+        testimonials: Object.assign({}, D.content.testimonials, c.testimonials || {}, { reviews: Array.isArray((c.testimonials || {}).reviews) ? c.testimonials.reviews.map(function (r) { return Object.assign({ name: '', rating: 5, text: '' }, r, { rating: Math.max(1, Math.min(5, Math.round(Number(r.rating) || 5))) }); }) : clone(D.content.testimonials.reviews) })
       }),
       categories: Array.isArray(d.categories) && d.categories.length ? d.categories.map(String) : D.categories,
       collections: D.collections.map(function (def, i) { return Object.assign({}, def, (d.collections || [])[i] || {}); }),
@@ -1220,21 +1272,76 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     }).join('');
   }
 
+  /* ---------- testimonials (Google reviews carousel) ---------- */
+  var GOOGLE_G = '<svg class="g-mark" viewBox="0 0 48 48" width="26" height="26" aria-hidden="true"><path fill="#4285F4" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.6 2.4 30.2 0 24 0 14.6 0 6.4 5.4 2.5 13.2l7.9 6.1C12.3 13.2 17.6 9.5 24 9.5z"/><path fill="#34A853" d="M46.1 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.4c-.5 2.9-2.2 5.3-4.7 6.9l7.3 5.7C43.6 37.9 46.1 31.8 46.1 24.5z"/><path fill="#FBBC05" d="M10.4 28.3c-.5-1.4-.8-2.9-.8-4.3s.3-3 .8-4.3l-7.9-6.1C.9 16.9 0 20.3 0 24s.9 7.1 2.5 10.4l7.9-6.1z"/><path fill="#EA4335" d="M24 48c6.2 0 11.5-2 15.3-5.5l-7.3-5.7c-2 1.4-4.7 2.3-8 2.3-6.4 0-11.7-3.7-13.6-8.8l-7.9 6.1C6.4 42.6 14.6 48 24 48z"/></svg>';
+  function starRow(r) { r = Math.max(0, Math.min(5, Math.round(Number(r) || 0))); var s = ''; for (var i = 1; i <= 5; i++) s += (i <= r ? '★' : '☆'); return '<span class="stars">' + s + '</span>'; }
+  var tmTimer = null;
+  function startTm() {
+    clearInterval(tmTimer); tmTimer = null;
+    var tr = $('#tm-track'); if (!tr) return;
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    tmTimer = setInterval(function () {
+      var card = tr.querySelector('.tm-card'); var w = card ? card.offsetWidth + 18 : 340;
+      if (tr.scrollLeft + tr.clientWidth >= tr.scrollWidth - 6) tr.scrollTo({ left: 0, behavior: 'smooth' });
+      else tr.scrollBy({ left: w, behavior: 'smooth' });
+    }, 4500);
+  }
+  function renderTestimonials() {
+    var t = store.content.testimonials || {}, sec = $('#testimonials'); if (!sec) return;
+    var revs = (t.reviews || []).filter(function (r) { return (Number(r.rating) || 0) >= 4 && r.text; });
+    if (!t.show || !revs.length) { sec.hidden = true; $('#testimonials-inner').innerHTML = ''; clearInterval(tmTimer); return; }
+    sec.hidden = false;
+    var head = '<div class="tm-info">' + (t.eyebrow ? '<span class="eyebrow">' + esc(t.eyebrow) + '</span>' : '') + '<h2>' + esc(t.heading || 'Reviews') + '</h2>' +
+      '<div class="tm-badge">' + GOOGLE_G + '<div class="tm-badge-txt"><strong>' + esc(t.rating || '4.3') + ' ' + starRow(Math.round(Number(t.rating) || 4)) + '</strong><span class="muted">Based on ' + esc(t.count || revs.length) + ' Google reviews</span></div>' +
+      (t.link && isSafeUrl(t.link) ? '<a class="btn btn-sm btn-ghost" href="' + esc(t.link) + '" target="_blank" rel="noopener noreferrer">Read all</a>' : '') + '</div></div>';
+    var nav = '<div class="tm-nav"><button class="arrow" type="button" data-tm="-1" aria-label="Previous reviews">' + I_L + '</button><button class="arrow" type="button" data-tm="1" aria-label="Next reviews">' + I_R + '</button></div>';
+    var track = '<div class="tm-track" id="tm-track">' + revs.map(function (r) {
+      return '<article class="tm-card"><div class="tm-card-top">' + starRow(r.rating) + GOOGLE_G + '</div>' +
+        '<p class="tm-text">' + esc(r.text) + '</p>' +
+        '<div class="tm-who"><span class="tm-avatar">' + esc(String(r.name || '?').charAt(0).toUpperCase()) + '</span><div><strong>' + esc(r.name) + '</strong><span class="muted">Google review</span></div></div></article>';
+    }).join('') + '</div>';
+    $('#testimonials-inner').innerHTML = '<div class="tm-top">' + head + nav + '</div>' + track;
+    startTm();
+  }
+
   /* ---------- catalog (all products page) ---------- */
-  var catalogCat = 'All';
+  var catalogCat = 'All', catalogSearch = '', catalogSort = 'featured';
+  function catalogList() {
+    var list = store.products.slice();
+    if (catalogCat !== 'All') list = list.filter(function (p) { return p.category === catalogCat; });
+    var q = catalogSearch.trim().toLowerCase();
+    if (q) list = list.filter(function (p) { return (String(p.name) + ' ' + String(p.category) + ' ' + String(p.tags || '')).toLowerCase().indexOf(q) > -1; });
+    if (catalogSort === 'price-asc') list.sort(function (a, b) { return (a.price || 0) - (b.price || 0); });
+    else if (catalogSort === 'price-desc') list.sort(function (a, b) { return (b.price || 0) - (a.price || 0); });
+    else if (catalogSort === 'name') list.sort(function (a, b) { return String(a.name).localeCompare(String(b.name)); });
+    return list;
+  }
+  function catalogCountText(n) { return n + (n === 1 ? ' piece' : ' pieces') + (catalogCat === 'All' ? '' : ' in ' + catalogCat) + (catalogSearch.trim() ? ' for “' + catalogSearch.trim() + '”' : ''); }
+  function updateCatalogList() {
+    var list = catalogList();
+    var g = $('#cat-grid'); if (g) g.innerHTML = list.length ? list.map(card).join('') : emptyState('No pieces found — try another search or category.');
+    var c = $('#cat-count'); if (c) c.textContent = catalogCountText(list.length);
+  }
   function renderCatalog() {
     var el = $('#catalog'); if (!el) return;
     var cats = store.categories;
     if (catalogCat !== 'All' && cats.indexOf(catalogCat) === -1) catalogCat = 'All';
     var chip = function (c) { return '<button type="button" class="chip" data-ccat="' + esc(c) + '" aria-pressed="' + (c === catalogCat) + '">' + esc(c) + '</button>'; };
-    var list = catalogCat === 'All' ? store.products : store.products.filter(function (p) { return p.category === catalogCat; });
+    var list = catalogList();
+    var sortOpts = [['featured', 'Featured'], ['price-asc', 'Price: Low to High'], ['price-desc', 'Price: High to Low'], ['name', 'Name A–Z']];
     el.innerHTML =
       '<div class="cat-top"><div class="adm-brand"><span class="logo-mark">' + esc((store.content.branding && store.content.branding.title) || 'IKXARI') + '</span><span>All Products</span></div>' +
       '<button class="btn btn-sm btn-outline" type="button" data-cat-close>Close</button></div>' +
       '<div class="cat-body container">' +
-      '<div class="chips">' + chip('All') + cats.map(chip).join('') + '</div>' +
-      '<p class="result-count">' + list.length + (list.length === 1 ? ' piece' : ' pieces') + (catalogCat === 'All' ? '' : ' in ' + esc(catalogCat)) + '</p>' +
-      '<div class="grid">' + (list.length ? list.map(card).join('') : emptyState('No pieces in ' + esc(catalogCat) + ' yet.')) + '</div>' +
+      '<div class="cat-toolbar">' +
+      '<input type="search" class="input cat-search" data-catsearch placeholder="Search products…" value="' + esc(catalogSearch) + '" aria-label="Search products">' +
+      '<select class="input cat-sort" data-catsort aria-label="Sort by">' + sortOpts.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === catalogSort ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>' +
+      '</div>' +
+      '<div class="cat-filter"><label class="cat-sel-wrap"><span class="lbl">Filter by category</span>' +
+      '<select class="input cat-select" data-catsel>' + ['All'].concat(cats).map(function (c) { return '<option value="' + esc(c) + '"' + (c === catalogCat ? ' selected' : '') + '>' + esc(c) + (c === 'All' ? ' (' + store.products.length + ')' : '') + '</option>'; }).join('') + '</select></label></div>' +
+      '<div class="chips cat-chips">' + chip('All') + cats.map(chip).join('') + '</div>' +
+      '<p class="result-count" id="cat-count">' + catalogCountText(list.length) + '</p>' +
+      '<div class="grid" id="cat-grid">' + (list.length ? list.map(card).join('') : emptyState('No pieces found — try another search or category.')) + '</div>' +
       '</div>';
   }
   function openCatalog() { var el = $('#catalog'); if (!el) return; el.hidden = false; document.documentElement.classList.add('locked'); renderCatalog(); el.scrollTop = 0; }
@@ -1290,7 +1397,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     renderBranding(); renderAnnouncement(); renderHero(); renderCollections();
     renderShelves();
     renderShop(); renderAtelier();
-    renderSections(); renderTrust(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
+    renderSections(); renderTestimonials(); renderTrust(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
     renderCartCount();
     if (!$('#catalog').hidden) renderCatalog();
     if (!$('#cart').hidden) renderCart();
@@ -1303,6 +1410,20 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   $('#catalog').addEventListener('click', function (e) {
     var cl = e.target.closest('[data-cat-close]'); if (cl) { closeCatalog(); return; }
     var c = e.target.closest('[data-ccat]'); if (c) { catalogCat = c.getAttribute('data-ccat'); renderCatalog(); }
+  });
+  $('#catalog').addEventListener('change', function (e) {
+    var s = e.target.closest('[data-catsel]'); if (s) { catalogCat = s.value; renderCatalog(); return; }
+    var so = e.target.closest('[data-catsort]'); if (so) { catalogSort = so.value; updateCatalogList(); }
+  });
+  $('#catalog').addEventListener('input', function (e) {
+    var se = e.target.closest('[data-catsearch]'); if (se) { catalogSearch = se.value; updateCatalogList(); }
+  });
+  // Testimonials carousel nav
+  $('#testimonials').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-tm]'); if (!btn) return;
+    var tr = $('#tm-track'); if (!tr) return;
+    var card = tr.querySelector('.tm-card'); var w = card ? card.offsetWidth + 18 : 340;
+    clearInterval(tmTimer); tr.scrollBy({ left: (+btn.getAttribute('data-tm')) * w, behavior: 'smooth' });
   });
 
   // Cart (bag)
@@ -1448,11 +1569,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     return '<div class="field"><label for="' + fid(p) + '">' + label + '</label><textarea class="input" id="' + fid(p) + '" data-k="' + p + '" rows="' + (rows || 4) + '">' + esc(getPath(draft, p)) + '</textarea></div>';
   }
   function fSelect(p, label, opts) {
-    var v = getPath(draft, p);
-    var has = opts.some(function (o) { return o[0] === v; });
+    var v = getPath(draft, p), vs = String(v);
+    var has = opts.some(function (o) { return String(o[0]) === vs; });
     if (!has && v) opts = [[v, v + ' (removed)']].concat(opts);
     return '<div class="field"><label for="' + fid(p) + '">' + label + '</label><select class="input" id="' + fid(p) + '" data-k="' + p + '">' +
-      opts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (o[0] === v ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></div>';
+      opts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (String(o[0]) === vs ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></div>';
   }
   function fCheck(p, label) {
     return '<label class="check"><input type="checkbox" data-k="' + p + '"' + (getPath(draft, p) ? ' checked' : '') + '>' + label + '</label>';
@@ -1576,6 +1697,18 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       draft.content.trust.map(function (t, i) {
         var b = 'content.trust.' + i;
         return '<div class="row">' + fText(b + '.emoji', 'Emoji') + fText(b + '.title', 'Title') + fText(b + '.text', 'Line') + '</div>';
+      }).join('') + '</div>' +
+      '<div class="adm-card"><h3>Google Reviews / Testimonials</h3><p class="note">A reviews carousel. Only 4★ and 5★ reviews show on the site.</p>' +
+      '<div class="checks" style="margin-bottom:14px">' + fCheck('content.testimonials.show', 'Show the reviews section') + '</div>' +
+      '<div class="row">' + fText('content.testimonials.eyebrow', 'Eyebrow') + fText('content.testimonials.heading', 'Heading') + '</div>' +
+      '<div class="row">' + fText('content.testimonials.rating', 'Overall rating (e.g. 4.3)') + fText('content.testimonials.count', 'Number of reviews', { type: 'number', attrs: 'min="0" inputmode="numeric"' }) + '</div>' +
+      fText('content.testimonials.link', 'Google reviews link (optional)', { type: 'url', attrs: 'inputmode="url"' }) +
+      '<div class="adm-head" style="margin:14px 0 10px"><h3 style="margin:0;font-size:1rem">Reviews</h3><button class="btn btn-sm btn-rose" type="button" data-act="add-review">+ Add review</button></div>' +
+      draft.content.testimonials.reviews.map(function (r, i) {
+        var b = 'content.testimonials.reviews.' + i;
+        return '<div class="adm-card" style="background:var(--bg)"><div class="adm-head" style="margin-bottom:10px"><strong>Review ' + (i + 1) + '</strong><button class="btn btn-sm btn-danger" type="button" data-act="del-review" data-i="' + i + '">Remove</button></div>' +
+          '<div class="row">' + fText(b + '.name', 'Name') + fSelect(b + '.rating', 'Rating', [['5', '★★★★★ (5)'], ['4', '★★★★ (4)'], ['3', '★★★ (3)'], ['2', '★★ (2)'], ['1', '★ (1)']]) + '</div>' +
+          fArea(b + '.text', 'Review text', 3) + '</div>';
       }).join('') + '</div>';
   }
 
@@ -1795,6 +1928,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       case 'add-slide': draft.content.slides.push({ eyebrow: 'New Season', title: 'A New *Chapter*', subtext: '', image: '' }); markDirty(); renderAdmin(); break;
       case 'del-slide': draft.content.slides.splice(i, 1); markDirty(); renderAdmin(); break;
       case 'add-section': draft.sections.push({ eyebrow: 'Editorial', heading: 'A new chapter', text: '', image: '', fit: 'cover', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' }); markDirty(); renderAdmin(); break;
+      case 'add-review': draft.content.testimonials.reviews.push({ name: 'Customer', rating: 5, text: '' }); markDirty(); renderAdmin(); break;
+      case 'del-review': draft.content.testimonials.reviews.splice(i, 1); markDirty(); renderAdmin(); break;
       case 'add-shelf': draft.content.shelves.push({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: '', title: 'New Shelf', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true }); markDirty(); renderAdmin(); break;
       case 'del-shelf': if (confirm('Remove this shelf?')) { draft.content.shelves.splice(i, 1); markDirty(); renderAdmin(); } break;
       case 'move-shelf': swap(draft.content.shelves, i, i + (+b.getAttribute('data-d'))); markDirty(); renderAdmin(); break;
