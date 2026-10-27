@@ -357,6 +357,15 @@ body.live-edit .live-block{position:relative}
 body.live-edit .live-block>.live-grip{display:inline-flex}
 .live-grip:active{cursor:grabbing}
 .live-block.dnd-over{outline:2px dashed var(--rose);outline-offset:-2px}
+.pick-wrap{position:fixed;inset:0;z-index:140;display:grid;place-items:center;padding:16px}
+.pick-back{position:absolute;inset:0;background:rgba(6,20,16,.55)}
+.pick-box{position:relative;width:min(460px,94vw);background:var(--bg);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:14px}
+.pick-box h3{font-size:1.25rem}
+.pick-box .muted{font-size:.88rem;margin:-6px 0 2px}
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pick-item{text-align:left;padding:16px 14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface);font-size:.9rem;font-weight:500;cursor:pointer;transition:border-color .2s,background-color .2s}
+.pick-item:hover{border-color:var(--rose);background:var(--blush)}
+@media (max-width:440px){.pick-grid{grid-template-columns:1fr}}
 /* Admin drag & drop */
 .drag-grip{flex:none;display:inline-grid;place-items:center;width:30px;height:38px;cursor:grab;color:var(--muted);border-radius:8px;touch-action:none}
 .drag-grip:hover{background:var(--blush);color:var(--rose-ink)}
@@ -627,11 +636,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
 
 <main id="main">
   <span id="top"></span>
-  <section class="hero" aria-label="Featured">
+  <section class="hero" aria-label="Featured" data-block="hero">
     <div class="container" id="hero"></div>
   </section>
 
-  <section class="section tight" id="collections" aria-labelledby="col-h">
+  <section class="section tight" id="collections" aria-labelledby="col-h" data-block="collections">
     <div class="container">
       <div class="section-head">
         <div><span class="eyebrow">Featured</span><h2 id="col-h">The Collections</h2></div>
@@ -641,9 +650,9 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     </div>
   </section>
 
-  <div id="shelves"></div>
+  <div id="shelves" data-block="shelves"></div>
 
-  <section class="section tight" id="shop" aria-labelledby="shop-h">
+  <section class="section tight" id="shop" aria-labelledby="shop-h" data-block="shop">
     <div class="container">
       <div class="section-head">
         <div><span class="eyebrow">Browse</span><h2 id="shop-h">Shop by Category</h2></div>
@@ -655,25 +664,25 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     </div>
   </section>
 
-  <section class="section tight" id="atelier" aria-labelledby="atelier-h">
+  <section class="section tight" id="atelier" aria-labelledby="atelier-h" data-block="atelier">
     <div class="container"><div class="panel" id="atelier-inner"></div></div>
   </section>
 
-  <div id="custom-sections"></div>
+  <div id="custom-sections" data-block="custom"></div>
 
-  <section class="section tight" id="crm" aria-labelledby="crm-h">
+  <section class="section tight" id="crm" aria-labelledby="crm-h" data-block="crm">
     <div class="container"><div class="panel" id="crm-inner"></div></div>
   </section>
 
-  <section class="section tight" id="contact" aria-labelledby="contact-h">
+  <section class="section tight" id="contact" aria-labelledby="contact-h" data-block="contact">
     <div class="container"><div class="panel" id="contact-inner"></div></div>
   </section>
 
-  <section class="section tight" id="testimonials" aria-label="Reviews">
+  <section class="section tight" id="testimonials" aria-label="Reviews" data-block="testimonials">
     <div class="container"><div id="testimonials-inner"></div></div>
   </section>
 
-  <section class="container" aria-label="Our promise" id="promise">
+  <section class="container" aria-label="Our promise" id="promise" data-block="promise">
     <div class="trust" id="trust-grid"></div>
   </section>
 </main>
@@ -853,7 +862,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
           { name: 'Ritu Agarwal', rating: 5, text: 'Exactly like the pictures. Will definitely order again for the festive season.' },
           { name: 'Meena Iyer', rating: 4, text: 'Elegant designs and helpful styling advice. Happy with my saree.' }
         ]
-      }
+      },
+      layout: ['hero', 'collections', 'shelves', 'shop', 'atelier', 'custom', 'crm', 'contact', 'testimonials', 'promise']
     },
     categories: CATEGORIES.slice(),
     collections: [
@@ -960,7 +970,8 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         slides: Array.isArray(c.slides) ? c.slides.map(function (s) { return Object.assign({ eyebrow: '', title: '', subtext: '', image: '', fit: 'cover', pos: 'center' }, s); }) : D.content.slides,
         trust: Array.isArray(c.trust) && c.trust.length ? c.trust.map(function (t) { return Object.assign({ emoji: '', title: '', text: '' }, t); }) : clone(D.content.trust),
         shelves: Array.isArray(c.shelves) ? c.shelves.map(function (sh) { return Object.assign({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: '', title: 'Section', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true }, sh, { categories: Array.isArray(sh.categories) ? sh.categories : [], productIds: Array.isArray(sh.productIds) ? sh.productIds : [], limit: Math.max(1, Math.min(48, Number(sh.limit) || 8)) }); }) : clone(D.content.shelves),
-        testimonials: Object.assign({}, D.content.testimonials, c.testimonials || {}, { reviews: Array.isArray((c.testimonials || {}).reviews) ? c.testimonials.reviews.map(function (r) { return Object.assign({ name: '', rating: 5, text: '' }, r, { rating: Math.max(1, Math.min(5, Math.round(Number(r.rating) || 5))) }); }) : clone(D.content.testimonials.reviews) })
+        testimonials: Object.assign({}, D.content.testimonials, c.testimonials || {}, { reviews: Array.isArray((c.testimonials || {}).reviews) ? c.testimonials.reviews.map(function (r) { return Object.assign({ name: '', rating: 5, text: '' }, r, { rating: Math.max(1, Math.min(5, Math.round(Number(r.rating) || 5))) }); }) : clone(D.content.testimonials.reviews) }),
+        layout: (function () { var def = D.content.layout, got = Array.isArray(c.layout) ? c.layout.filter(function (x) { return def.indexOf(x) > -1; }) : []; def.forEach(function (x) { if (got.indexOf(x) < 0) got.push(x); }); return got; })()
       }),
       categories: Array.isArray(d.categories) && d.categories.length ? d.categories.map(String) : D.categories,
       collections: D.collections.map(function (def, i) { return Object.assign({}, def, (d.collections || [])[i] || {}); }),
@@ -1154,7 +1165,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       var prods = shelfProducts(sh);
       if (!prods.length && !liveEdit) return ''; // hide empty shelves on the live site
       var b = 'content.shelves.' + i;
-      return '<section class="section tight shelf live-block" data-liveblock="shelves" data-i="' + i + '" aria-label="' + esc(sh.title) + '">' + (liveEdit ? '<span class="live-grip" draggable="true" data-dnd="shelves" data-i="' + i + '">⠿ ' + esc(sh.title) + '</span>' : '') + '<div class="container">' +
+      return '<section class="section tight shelf" aria-label="' + esc(sh.title) + '"><div class="container">' +
         '<div class="section-head"><div>' + ((sh.eyebrow || liveEdit) ? '<span class="eyebrow" data-edit="' + b + '.eyebrow">' + esc(sh.eyebrow) + '</span>' : '') + '<h2 data-edit="' + b + '.title">' + esc(sh.title) + '</h2></div>' +
         (sh.viewAll ? '<a class="link-arrow" href="#shop-all">View all</a>' : '') + '</div>' +
         '<div class="grid">' + prods.map(card).join('') + '</div>' +
@@ -1268,7 +1279,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
         btn = '<a class="btn btn-wa" href="' + esc(waLink(WA_MSG.general)) + '" target="_blank" rel="noopener noreferrer">' + I_WA + 'Get a Quote</a>';
       }
       var sb = 'sections.' + i;
-      return '<section class="section tight live-block" data-liveblock="sections" data-i="' + i + '" aria-label="' + esc(s.heading) + '">' + (liveEdit ? '<span class="live-grip" draggable="true" data-dnd="sections" data-i="' + i + '">⠿ ' + (esc(s.heading) || 'Section') + '</span>' : '') + '<div class="container"><div class="split' + (i % 2 === 0 ? ' reverse' : '') + '">' +
+      return '<section class="section tight" aria-label="' + esc(s.heading) + '"><div class="container"><div class="split' + (i % 2 === 0 ? ' reverse' : '') + '">' +
         media +
         '<div class="split-copy" data-align="' + esc(s.align || 'left') + '">' + ((s.eyebrow || liveEdit) ? '<span class="eyebrow" data-edit="' + sb + '.eyebrow">' + esc(s.eyebrow) + '</span>' : '') +
         '<h2 data-edit="' + sb + '.heading">' + esc(s.heading) + '</h2>' + ((s.text || liveEdit) ? '<p class="body" data-edit="' + sb + '.text">' + esc(s.text) + '</p>' : '') +
@@ -1284,6 +1295,10 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     }
     return '<span class="logo-mark"' + (forFooter ? ' style="margin-right:0"' : '') + '>' + esc(bd.title || 'IKXARI') + '</span>' +
       (bd.showTagline && bd.tagline ? '<span class="logo-tag">' + esc(bd.tagline) + '</span>' : '');
+  }
+  function renderLayout() {
+    var main = $('#main'); if (!main) return;
+    (store.content.layout || []).forEach(function (id) { var el = main.querySelector('[data-block="' + id + '"]'); if (el) main.appendChild(el); });
   }
   function renderBranding() {
     var bd = store.content.branding || {};
@@ -1440,6 +1455,7 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
   }
   function exitLive() {
     liveEdit = false;
+    removeBlockGrips();
     document.body.classList.remove('live-edit');
     $('#live-bar').hidden = true;
     setEditable(false); renderAll();
@@ -1453,48 +1469,87 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
       else toast('Saved locally; server refused: ' + ((j && j.error) || 'error'));
     }).catch(function () { toast('Saved locally — backend unreachable.'); }).then(function () { if (btn) btn.disabled = false; });
   }
-  var liveDnd = { group: null, from: -1 };
-  function liveArr(g) { return g === 'shelves' ? store.content.shelves : g === 'sections' ? store.sections : null; }
+  var liveDnd = { block: null };
+  function liveSync() { if (!liveEdit) return; setEditable(true); addBlockGrips(); }
+  var BLOCK_LABEL = { hero: 'Hero', collections: 'Collections', shelves: 'Product Shelves', shop: 'Shop by Category', atelier: 'Our Story', custom: 'Custom Sections', crm: 'Contact CRM', contact: 'Visit Us', testimonials: 'Reviews', promise: 'Promise Badges' };
+  function addBlockGrips() {
+    removeBlockGrips();
+    $$('#main [data-block]').forEach(function (el) {
+      el.classList.add('live-block');
+      var id = el.getAttribute('data-block');
+      var g = document.createElement('span');
+      g.className = 'live-grip'; g.setAttribute('draggable', 'true'); g.setAttribute('data-blockgrip', id);
+      g.textContent = '⠿ ' + (BLOCK_LABEL[id] || id);
+      el.insertBefore(g, el.firstChild);
+    });
+  }
+  function removeBlockGrips() {
+    $$('.live-grip[data-blockgrip]').forEach(function (g) { g.remove(); });
+    $$('#main [data-block]').forEach(function (el) { el.classList.remove('live-block'); el.classList.remove('dnd-over'); });
+  }
   document.addEventListener('input', function (e) {
     if (!liveEdit) return; var el = e.target.closest('[data-edit]'); if (!el) return;
     setPath(store, el.getAttribute('data-edit'), el.textContent); cacheLocal(); liveDirty = true;
   });
   document.addEventListener('click', function (e) {
-    if (liveEdit && !e.target.closest('#live-bar')) { var a = e.target.closest('a'); if (a) e.preventDefault(); }
+    if (liveEdit && !e.target.closest('#live-bar') && !e.target.closest('.pick-wrap')) { var a = e.target.closest('a'); if (a) e.preventDefault(); }
   }, true);
   document.addEventListener('dragstart', function (e) {
-    if (!liveEdit) return; var g = e.target.closest('.live-grip'); if (!g) return;
-    liveDnd.group = g.getAttribute('data-dnd'); liveDnd.from = +g.getAttribute('data-i');
+    if (!liveEdit) return; var g = e.target.closest('.live-grip[data-blockgrip]'); if (!g) return;
+    liveDnd.block = g.getAttribute('data-blockgrip');
     if (e.dataTransfer) { e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', 'x'); } catch (x) {} }
   });
   document.addEventListener('dragover', function (e) {
-    if (!liveEdit || liveDnd.group === null) return;
-    var item = e.target.closest('.live-block[data-liveblock="' + liveDnd.group + '"]'); if (!item) return;
+    if (!liveEdit || !liveDnd.block) return;
+    var y = e.clientY, h = window.innerHeight; // auto-scroll so a block can travel header<->footer
+    if (y < 90) window.scrollBy(0, -24); else if (y > h - 100) window.scrollBy(0, 24);
+    var item = e.target.closest('#main [data-block]'); if (!item) return;
     e.preventDefault(); $$('.live-block.dnd-over').forEach(function (x) { if (x !== item) x.classList.remove('dnd-over'); }); item.classList.add('dnd-over');
   });
   document.addEventListener('drop', function (e) {
-    if (!liveEdit || liveDnd.group === null) return;
-    var item = e.target.closest('.live-block[data-liveblock="' + liveDnd.group + '"]');
+    if (!liveEdit || !liveDnd.block) return;
+    var item = e.target.closest('#main [data-block]');
     $$('.live-block.dnd-over').forEach(function (x) { x.classList.remove('dnd-over'); });
-    var from = liveDnd.from, grp = liveDnd.group; liveDnd.group = null; liveDnd.from = -1;
+    var from = liveDnd.block; liveDnd.block = null;
     if (!item) return; e.preventDefault();
-    var to = +item.getAttribute('data-i'), arr = liveArr(grp);
-    if (arr && from > -1 && to > -1 && from !== to) {
-      var m = arr.splice(from, 1)[0]; arr.splice(to, 0, m); cacheLocal(); liveDirty = true;
-      if (grp === 'shelves') renderShelves(); else renderSections();
-      setEditable(true);
-    }
+    var to = item.getAttribute('data-block'); if (to === from) return;
+    var arr = store.content.layout, fi = arr.indexOf(from), ti = arr.indexOf(to);
+    if (fi < 0 || ti < 0) return;
+    arr.splice(fi, 1); arr.splice(arr.indexOf(to) + (fi < ti ? 1 : 0), 0, from);
+    cacheLocal(); liveDirty = true; renderLayout(); liveSync();
   });
-  document.addEventListener('dragend', function () { $$('.live-block.dnd-over').forEach(function (x) { x.classList.remove('dnd-over'); }); liveDnd.group = null; });
+  document.addEventListener('dragend', function () { $$('.live-block.dnd-over').forEach(function (x) { x.classList.remove('dnd-over'); }); liveDnd.block = null; });
+
+  function openAddPicker() {
+    var types = [['section', '🖼️ Image + Text section'], ['video', '🎬 Video section'], ['cta', '🔘 Button / CTA band'], ['shelf', '🛍️ Product shelf (row)']];
+    var m = document.createElement('div'); m.className = 'pick-wrap';
+    m.innerHTML = '<div class="pick-back" data-pick-close></div><div class="pick-box"><h3>Add element</h3><p class="muted">Pick what to add — it drops in, then drag it anywhere.</p><div class="pick-grid">' +
+      types.map(function (t) { return '<button class="pick-item" type="button" data-pick="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
+      '</div><button class="btn btn-sm btn-ghost" type="button" data-pick-close>Cancel</button></div>';
+    document.body.appendChild(m);
+    m.addEventListener('click', function (e) {
+      if (e.target.closest('[data-pick-close]')) { m.remove(); return; }
+      var b = e.target.closest('[data-pick]'); if (b) { addElement(b.getAttribute('data-pick')); m.remove(); }
+    });
+  }
+  function addElement(type) {
+    if (type === 'shelf') {
+      store.content.shelves.push({ id: 'sh_' + Math.random().toString(36).slice(2, 8), eyebrow: 'New', title: 'New Shelf', source: 'all', tag: '', categories: [], productIds: [], limit: 8, viewAll: true });
+      cacheLocal(); liveDirty = true; renderShelves(); liveSync();
+      var sh = $('#shelves'); if (sh && sh.lastElementChild) sh.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    var s = { eyebrow: 'New', heading: 'New Section', text: 'Describe this…', image: '', fit: 'cover', pos: 'center', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' };
+    if (type === 'video') { s.mediaType = 'video'; s.heading = 'Watch our film'; s.text = 'Add a YouTube / Drive / .mp4 link in Admin → Sections.'; }
+    if (type === 'cta') { s.heading = 'Ready to order?'; s.text = 'Message us on WhatsApp for a quick quote.'; s.buttonLabel = 'Order on WhatsApp'; }
+    store.sections.push(s); cacheLocal(); liveDirty = true; renderSections(); liveSync();
+    var secs = $('#custom-sections'); if (secs && secs.lastElementChild) secs.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
   (function () {
     var ex = $('#live-exit'), sv = $('#live-save'), ad = $('#live-add-section');
     if (ex) ex.addEventListener('click', exitLive);
     if (sv) sv.addEventListener('click', saveLive);
-    if (ad) ad.addEventListener('click', function () {
-      store.sections.push({ eyebrow: 'New', heading: 'New Section', text: 'Describe this section…', image: '', fit: 'cover', pos: 'center', align: 'left', mediaType: 'image', videoUrl: '', buttonLabel: '', buttonUrl: '' });
-      cacheLocal(); liveDirty = true; renderSections(); setEditable(true);
-      var secs = $('#custom-sections'); if (secs && secs.lastElementChild) secs.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    });
+    if (ad) ad.addEventListener('click', openAddPicker);
   })();
 
   function renderWaLinks() {
@@ -1506,9 +1561,11 @@ select.input{appearance:none;-webkit-appearance:none;padding-right:40px;backgrou
     renderShelves();
     renderShop(); renderAtelier();
     renderSections(); renderTestimonials(); renderTrust(); renderCrm(); renderContact(); renderFooterContact(); renderWaLinks();
+    renderLayout();
     renderCartCount();
     if (!$('#catalog').hidden) renderCatalog();
     if (!$('#cart').hidden) renderCart();
+    if (liveEdit) liveSync();
   }
 
   /* ---------- storefront interactions ---------- */
